@@ -12,8 +12,16 @@ coverage/
 # Tool cache (portable JDK, cmdline-tools downloads)
 .sublime/
 
-# Scratch area — generated test apps, build artifacts
-sandbox/
+# Sandbox: track critical source of test apps, but never heavy/generated output.
+# (Each test app's own .gitignore also excludes node_modules, /android, .expo, etc.)
+**/node_modules/
+sandbox/**/android/
+sandbox/**/ios/
+sandbox/**/.expo/
+sandbox/**/.gradle/
+sandbox/**/*.apk
+sandbox/**/*.aab
+**/local.properties
 
 # Logs
 *.log
