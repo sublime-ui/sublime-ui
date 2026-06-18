@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
+import type { Variant, Tone, Size } from '../common.js';
 
-export type Variant = 'solid' | 'soft' | 'outline' | 'ghost';
-export type Tone = 'primary' | 'success' | 'danger' | 'warning' | 'info' | 'neutral';
-export type Size = 'sm' | 'md' | 'lg';
+export type { Variant, Tone, Size };
 
 export interface ButtonProps {
   children: ReactNode;
