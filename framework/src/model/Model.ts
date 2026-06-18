@@ -1,5 +1,8 @@
+import { useEffect } from 'react';
 import { modelRegistry } from '../discovery/modelRegistry.js';
 import { store } from '../store/store.js';
+import { useAppSelector } from '../store/hooks.js';
+import type { ModelSliceState } from '../store/createModelSlice.js';
 import { hydrate, toPlain } from './cast.js';
 import { ModelCollection } from './ModelCollection.js';
 import { ApiError } from '../gateway/ApiError.js';
@@ -130,5 +133,54 @@ export class Model {
     } catch (error) {
       return (this as typeof Model).fail(error);
     }
+  }
+
+  // NOTE: `rxAll`/`rxFind` are React hooks — they call `useAppSelector`/`useEffect`
+  // internally, so they MUST be called from a component's render body, per the
+  // Rules of Hooks. They return plain reactive snapshots; the fetch side effects
+  // run via `useEffect` when the slice status is `idle`.
+  static rxAll<T extends Model>(
+    this: ModelCtor<T>,
+    query?: Record<string, string | number>,
+  ): ModelCollection<T> {
+    const ctor = this as typeof Model;
+    const reg = ctor.reg();
+    const slice = useAppSelector(
+      (s) => s[reg.sliceName],
+    ) as ModelSliceState | undefined;
+    const status = slice?.status ?? 'idle';
+    const items = slice?.items ?? [];
+
+    useEffect(() => {
+      if (status === 'idle') void ctor.all.call(this, query);
+    }, [status]);
+
+    return new ModelCollection<T>(
+      items.map((p) => hydrate(this, p) as T),
+      {
+        loading: status === 'idle' || status === 'loading',
+        error: slice?.error ?? null,
+        refetch: () => void ctor.all.call(this, query),
+      },
+    );
+  }
+
+  static rxFind<T extends Model>(
+    this: ModelCtor<T>,
+    id: string | number,
+  ): T | null {
+    const ctor = this as typeof Model;
+    const reg = ctor.reg();
+    const slice = useAppSelector(
+      (s) => s[reg.sliceName],
+    ) as ModelSliceState | undefined;
+    const status = slice?.status ?? 'idle';
+    const found = (slice?.items ?? []).find((p) => p[reg.idKey] === id);
+
+    useEffect(() => {
+      if (!found && status === 'idle') void ctor.find.call(this, id);
+    }, [status, id]);
+
+    return found ? (hydrate(this, found) as T) : null;
   }
 }
