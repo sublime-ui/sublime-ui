@@ -33,6 +33,14 @@ export function findApk(
   return existsSync(p) ? p : null;
 }
 
+export function findAab(projectDir: string): string | null {
+  const p = join(
+    projectDir,
+    'android', 'app', 'build', 'outputs', 'bundle', 'release', 'app-release.aab',
+  );
+  return existsSync(p) ? p : null;
+}
+
 export function ensureLocalProperties(
   projectDir: string,
   androidHome: string,
@@ -88,7 +96,13 @@ export async function buildCommand(opts: {
     const mb = (statSync(apk).size / (1024 * 1024)).toFixed(1);
     log.success(`APK ready: ${apk} (${mb} MB)`);
   } else {
-    log.success('AAB built under android/app/build/outputs/bundle/release/.');
+    const aab = findAab(opts.project);
+    if (aab === null) {
+      log.error('Build reported success but no AAB was found.');
+      return 1;
+    }
+    const mb = (statSync(aab).size / (1024 * 1024)).toFixed(1);
+    log.success(`AAB ready: ${aab} (${mb} MB)`);
   }
   return 0;
 }

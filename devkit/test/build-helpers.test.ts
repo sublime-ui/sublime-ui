@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import {
   readAndroidPackageId,
   findApk,
+  findAab,
   ensureLocalProperties,
   gradleTaskFor,
 } from '../src/commands/build.js';
@@ -68,5 +69,21 @@ describe('findApk', () => {
     writeFileSync(join(apkDir, 'app-debug.apk'), 'x');
     expect(existsSync(findApk(dir, 'debug') ?? '')).toBe(true);
     expect(findApk(dir, 'release')).toBeNull();
+  });
+});
+
+describe('findAab', () => {
+  let dir = '';
+  beforeEach(() => { dir = mkdtempSync(join(tmpdir(), 'proj-')); });
+  afterEach(() => { rmSync(dir, { recursive: true, force: true }); });
+
+  it('returns null when no aab', () => {
+    expect(findAab(dir)).toBeNull();
+  });
+  it('finds the release aab', () => {
+    const aabDir = join(dir, 'android', 'app', 'build', 'outputs', 'bundle', 'release');
+    mkdirSync(aabDir, { recursive: true });
+    writeFileSync(join(aabDir, 'app-release.aab'), 'x');
+    expect(existsSync(findAab(dir) ?? '')).toBe(true);
   });
 });
