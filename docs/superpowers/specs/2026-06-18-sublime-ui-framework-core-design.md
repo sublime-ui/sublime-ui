@@ -98,9 +98,19 @@ export class Sale extends Model {
   enumerable data properties are). If a project later needs a true `fillable`
   allow-list (to filter what is persisted or sent on `save()`), it can opt into a
   runtime `static schema = { id: t<number>() }` variant — **out of scope for v1**.
+- **Typed access & computed values.** Declared fields are typed
+  (`sale.total: number`). Accessing an **undeclared** member is a compile-time
+  error (`sale.average` → "Property 'average' does not exist on type 'Sale'"),
+  even though the raw-object cache may hold it at runtime — this strictness is
+  intentional and catches typos. Use a **getter** for computed values
+  (`get average() { return this.total / this.count; }` — typed, never persisted),
+  and `declare` for real API fields you read. A dynamic accessor for arbitrary
+  returned fields (e.g. `sale.attr<number>('average')` or a `Model` index
+  signature) is **intentionally omitted in v1** to preserve type safety; it can be
+  added opt-in later.
 - Static methods (`all`, `find`, `rxAll`, …) return the subclass via polymorphic
-  `this` typing. Constructor-arg typing for `new Sale({ … })` / `Sale.make({ … })`
-  is a small TS detail resolved in the plan.
+  `this` typing. `find` returns `T | null`. Constructor-arg typing for
+  `new Sale({ … })` / `Sale.make({ … })` is a small TS detail resolved in the plan.
 
 ### 3.2 Commands (imperative, async, throw `ApiError`)
 
