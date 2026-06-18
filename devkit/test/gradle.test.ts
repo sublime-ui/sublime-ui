@@ -1,5 +1,23 @@
 import { describe, it, expect } from 'vitest';
-import { parseMissingSdkComponents } from '../src/lib/gradle.js';
+import { isAbsolute } from 'node:path';
+import { parseMissingSdkComponents, gradlewPath } from '../src/lib/gradle.js';
+
+describe('gradlewPath', () => {
+  it('returns an absolute path even when given a relative android dir', () => {
+    // A relative gradlew path spawned with cwd=androidDir is re-resolved
+    // against the child cwd on Windows, doubling the path and failing with
+    // "The system cannot find the path specified." Must be absolute.
+    const p = gradlewPath('sandbox/DemoApp/android');
+    expect(isAbsolute(p)).toBe(true);
+    expect(p.endsWith('gradlew') || p.endsWith('gradlew.bat')).toBe(true);
+  });
+
+  it('leaves an already-absolute android dir absolute', () => {
+    const abs =
+      process.platform === 'win32' ? 'C:\\proj\\android' : '/proj/android';
+    expect(isAbsolute(gradlewPath(abs))).toBe(true);
+  });
+});
 
 describe('parseMissingSdkComponents', () => {
   it('extracts NDK and CMake ids from the real failure text', () => {

@@ -16,14 +16,17 @@ export function parseMissingSdkComponents(output: string): string[] {
   return result;
 }
 
-import { join } from 'node:path';
+import { resolve } from 'node:path';
 import { run } from '../util/exec.js';
 import { ensureComponents } from './sdkmanager.js';
 import { log } from '../util/log.js';
 
 export function gradlewPath(projectAndroidDir: string): string {
   const script = process.platform === 'win32' ? 'gradlew.bat' : 'gradlew';
-  return join(projectAndroidDir, script);
+  // MUST be absolute: a relative gradlew path spawned with cwd=androidDir is
+  // re-resolved against the child cwd on Windows (doubling the path) → fails
+  // with "The system cannot find the path specified."
+  return resolve(projectAndroidDir, script);
 }
 
 export interface GradleRunResult {
@@ -49,9 +52,10 @@ async function defaultRunner(
 ): Promise<GradleRunResult> {
   const gw = gradlewPath(androidDir);
   const env = { JAVA_HOME: jdk17Home, ANDROID_HOME: androidHome };
-  // Capture output for parsing while still echoing progress.
+  // Capture output for parsing while still echoing progress. cwd is resolved
+  // to absolute so the spawn never depends on the parent process cwd.
   const res = await run(gw, [task, '--no-daemon', '--stacktrace'], {
-    cwd: androidDir,
+    cwd: resolve(androidDir),
     env,
   });
   process.stdout.write(res.stdout);
