@@ -24,9 +24,11 @@ export default [
     // signatures (the spec fixes the IPC listener as `(e, ...a: any[]) => any`
     // and the registry/types entries as `(...a: any[]) => any`) so the generic
     // `native:invoke` channel can carry arbitrary, structured-clone-safe
-    // payloads. Scope the relaxation to the desktop package only — the library
-    // package keeps `no-explicit-any` enforced.
-    files: ['desktop/src/**/*.ts'],
+    // payloads. The desktop tests mirror those spec-mandated IPC signatures in
+    // their fakes (fake `ipcMain.handle`/`invoke`, fake `ipcRenderer.invoke`),
+    // so the relaxation covers `test/` too. Scope it to the desktop package
+    // only — the library package keeps `no-explicit-any` enforced.
+    files: ['desktop/src/**/*.ts', 'desktop/test/**/*.ts'],
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
     },
