@@ -13,10 +13,9 @@ import { parse, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { buildNav } from '../../src/commands/build-nav.js';
 
-// `buildNav` dynamic-imports the storybooks by file URL. Under vitest that runs
-// through vite-node, whose loader mishandles percent-encoded URLs (the worktree
-// path contains a space). We assemble the fixture app in a clean temp root whose
-// path needs no encoding. (Plain Node — the shipped CLI — handles this fine.)
+// `buildNav` statically analyzes the storybooks (no dynamic import), so a path
+// with a space is harmless. We still assemble the fixture app under a dedicated
+// temp root for tidy isolation / cleanup, shared with the other nav tests.
 const cleanTmpRoot = join(parse(tmpdir()).root, 'sublime-devkit-tests');
 const nativeFixtureSrc = fileURLToPath(
   new URL('../fixtures/nav-app/src/navigation/storybook.native.ts', import.meta.url),

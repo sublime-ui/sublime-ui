@@ -10,7 +10,7 @@ export interface PageOptions {
 }
 
 /**
- * An analyzed storybook node, built by `load-storybook`. A `book` carries a
+ * An analyzed storybook node, built by `analyze-storybook`. A `book` carries a
  * `format` and `children`; a `page` carries a `component`.
  */
 export interface RouteNode {
@@ -21,7 +21,7 @@ export interface RouteNode {
   options: PageOptions;
   children?: RouteNode[];
   /**
-   * Set by `load-storybook` when a `link()` does not reference a valid `book()`.
+   * Set by `analyze-storybook` when a `link()` does not reference a valid `book()`.
    * Carried as data (rather than thrown) so `validate` can report it as a clean
    * `bad-link` diagnostic alongside the other rules.
    */

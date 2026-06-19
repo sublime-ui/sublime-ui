@@ -15,10 +15,9 @@ import { buildNav } from '../../src/commands/build-nav.js';
 // what is checked in. The `typecheck:fixture` script then `tsc`s those committed
 // files against the real platform peers; this test guarantees they are not stale.
 //
-// `buildNav` dynamic-imports the storybooks by file URL; under vite-node a
-// space in the worktree path breaks that loader, so we assemble the app in a
-// clean temp root whose path needs no percent-encoding (same trick as the
-// build:nav smoke test).
+// `buildNav` statically analyzes the storybooks (no dynamic import), so a path
+// with a space is harmless. We still assemble the app under a dedicated temp
+// root for tidy isolation / cleanup (same root as the other nav tests).
 const cleanTmpRoot = join(parse(tmpdir()).root, 'sublime-devkit-tests');
 const fixtureNav = fileURLToPath(new URL('../fixtures/nav-app/src/navigation/', import.meta.url));
 

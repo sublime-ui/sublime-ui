@@ -1,7 +1,7 @@
 import { join } from 'node:path';
 import { readFileSync, watch as fsWatch, type FSWatcher } from 'node:fs';
 import { loadConfig } from '../lib/generators/config.js';
-import { loadStorybook } from '../lib/navigation/load-storybook.js';
+import { analyzeStorybook } from '../lib/navigation/analyze-storybook.js';
 import { validate, type Diagnostic } from '../lib/navigation/validate.js';
 import { flatten } from '../lib/navigation/flatten.js';
 import { extractParams } from '../lib/navigation/extract-params.js';
@@ -72,8 +72,8 @@ async function buildOnce(navDir: string, nativeFile: string, webFile: string): P
   let nativeRoot;
   let webRoot;
   try {
-    nativeRoot = await loadStorybook(nativeFile);
-    webRoot = await loadStorybook(webFile);
+    nativeRoot = analyzeStorybook(nativeFile);
+    webRoot = analyzeStorybook(webFile);
   } catch (err) {
     log.error(err instanceof Error ? err.message : String(err));
     return 1;

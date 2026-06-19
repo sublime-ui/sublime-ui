@@ -16,7 +16,7 @@ const WEB_FORMATS = new Set<PrintFormat>(['sidebar', 'stack', 'tabs']);
  * - `duplicate-key`: the same page key appears more than once across the tree.
  * - `dangling`: a page has no component / a link or book has no children.
  * - `multiple-initial`: a book has more than one child with `initial: true`.
- * - `bad-link`: a `link()` does not reference a `book()` (flagged by load-storybook).
+ * - `bad-link`: a `link()` does not reference a `book()` (flagged by analyze-storybook).
  */
 export function validate(root: RouteNode, platform: 'mobile' | 'web'): Diagnostic[] {
   const diagnostics: Diagnostic[] = [];
