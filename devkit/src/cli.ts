@@ -8,6 +8,7 @@ import { makeModel } from './commands/make-model.js';
 import { makeComponent } from './commands/make-component.js';
 import { themeInit } from './commands/theme-init.js';
 import { desktopDev } from './commands/desktop-dev.js';
+import { desktopBuild } from './commands/desktop-build.js';
 import { log } from './util/log.js';
 
 const program = new Command();
@@ -106,6 +107,14 @@ program
   .option('--project <path>', 'project directory', process.cwd())
   .action(async (opts: { project: string }) => {
     process.exit(await desktopDev({ project: opts.project }));
+  });
+
+program
+  .command('desktop:build')
+  .description('Build distributable Electron artifacts (electron-forge make)')
+  .option('--project <path>', 'project directory', process.cwd())
+  .action(async (opts: { project: string }) => {
+    process.exit(await desktopBuild({ project: opts.project }));
   });
 
 program.parseAsync(process.argv).catch((err: unknown) => {
