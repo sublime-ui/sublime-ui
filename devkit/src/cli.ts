@@ -7,6 +7,7 @@ import { input } from '@inquirer/prompts';
 import { makeModel } from './commands/make-model.js';
 import { makeComponent } from './commands/make-component.js';
 import { themeInit } from './commands/theme-init.js';
+import { desktopDev } from './commands/desktop-dev.js';
 import { log } from './util/log.js';
 
 const program = new Command();
@@ -97,6 +98,14 @@ program
   .option('--force', 'overwrite existing files')
   .action(async (opts: { force?: boolean }) => {
     process.exit(await themeInit({ cwd: process.cwd(), force: opts.force ?? false }));
+  });
+
+program
+  .command('desktop:dev')
+  .description('Run the Electron desktop shell in development (electron-forge start)')
+  .option('--project <path>', 'project directory', process.cwd())
+  .action(async (opts: { project: string }) => {
+    process.exit(await desktopDev({ project: opts.project }));
   });
 
 program.parseAsync(process.argv).catch((err: unknown) => {
