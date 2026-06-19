@@ -27,7 +27,15 @@ export function resolve(
   method: string,
 ): ((...args: any[]) => Promise<any>) | undefined {
   const methods: NativeMethods | undefined = services.get(mod)?.methods;
-  return methods?.[method];
+  if (methods === undefined) {
+    return undefined;
+  }
+  // OWN-property lookup only: a renderer must never reach inherited members
+  // (`constructor`, `__proto__`, `toString`, `hasOwnProperty`, `valueOf`, …)
+  // through the prototype chain, which `methods[method]` would expose.
+  return Object.prototype.hasOwnProperty.call(methods, method)
+    ? methods[method]
+    : undefined;
 }
 
 /** Clear all registered services. Test seam. */
