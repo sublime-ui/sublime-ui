@@ -21,7 +21,7 @@ my-app/
     navigation/
       storybook.web.ts      # imports ../screens/web
       storybook.native.ts   # imports ../screens/mobile
-      navigation.web.tsx     # generated
+      navigation.tsx         # generated
       navigation.native.tsx  # generated
   web/            # web entry — mounts the web app
   mobile/         # React Native entry

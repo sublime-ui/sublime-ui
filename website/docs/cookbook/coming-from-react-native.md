@@ -102,7 +102,7 @@ export default book({
 ```
 
 `sublime build:nav` compiles this into `navigation.native.tsx` (React Navigation),
-`navigation.web.tsx` (React Router), and a `routes.d.ts` typed route map. At runtime:
+`navigation.tsx` (React Router), and a `routes.d.ts` typed route map. At runtime:
 
 ```ts
 const nav = useNav();

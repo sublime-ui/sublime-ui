@@ -12,7 +12,7 @@ environment and platform toolchains.
 ## Web
 
 The web target runs your `screens/web/` screens with the MUI theme generated from
-your tokens, behind the `navigation.web.tsx` (react-router) output of
+your tokens, behind the `navigation.tsx` (react-router) output of
 `build:nav`. Develop it with your project's standard web dev server from the
 `web/` entry — re-run `sublime build:nav` whenever you change a storybook so the
 generated navigation stays in sync.

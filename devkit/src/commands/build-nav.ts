@@ -46,7 +46,7 @@ function printDiagnostics(platform: string, diagnostics: Diagnostic[]): void {
  * Loads `storybook.native.ts` (mobile) and `storybook.web.ts` (web) from the
  * project's `navigationDir`, validates each against its platform's rules, and —
  * only when both are clean — renders and force-writes the four generated files
- * (`navigation.native.tsx`, `navigation.web.tsx`, `routes.d.ts`, `index.ts`).
+ * (`navigation.native.tsx`, `navigation.tsx`, `routes.d.ts`, `index.ts`).
  * On any validation error it prints diagnostics and writes nothing.
  *
  * @returns process exit code (0 success, 1 on validation/load failure).

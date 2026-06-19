@@ -171,7 +171,7 @@ Storybooks are compiled ahead of time into idiomatic, fully typed navigation:
 npx @sublime-ui/devkit build:nav
 ```
 
-This generates `navigation.native.tsx` (React Navigation), `navigation.web.tsx`
+This generates `navigation.native.tsx` (React Navigation), `navigation.tsx`
 (react-router), a typed route map (`routes.d.ts`), and an `index` barrel that
 exports the platform-resolved `<Navigation/>`.
 

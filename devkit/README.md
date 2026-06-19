@@ -39,7 +39,7 @@ Generators never overwrite without `--force`; barrel updates are idempotent.
 
 | Command | What it does |
 |---|---|
-| `sublime build:nav [--watch] [--force] [--project <path>]` | Compiles per-platform storybooks (`storybook.web.ts` / `storybook.native.ts`) into `navigation.web.tsx` (react-router), `navigation.native.tsx` (React Navigation), a typed route map (`routes.d.ts`), and an index barrel. `--watch` rebuilds on change. |
+| `sublime build:nav [--watch] [--force] [--project <path>]` | Compiles per-platform storybooks (`storybook.web.ts` / `storybook.native.ts`) into `navigation.tsx` (react-router), `navigation.native.tsx` (React Navigation), a typed route map (`routes.d.ts`), and an index barrel. `--watch` rebuilds on change. |
 
 ## Desktop (Electron Forge)
 

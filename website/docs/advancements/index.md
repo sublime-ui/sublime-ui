@@ -34,7 +34,7 @@ map:
 ```ts
 // sublime build:nav generates, from your storybooks:
 //   navigation.native.tsx   — React Navigation (mobile)
-//   navigation.web.tsx      — react-router (web)
+//   navigation.tsx          — react-router (web)
 //   routes.d.ts             — the typed route map turnTo is checked against
 //   index                   — barrel exporting the platform-resolved <Navigation/>
 ```

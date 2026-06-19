@@ -37,7 +37,7 @@ function kebab(key: string): string {
 }
 
 /**
- * Emit a `navigation.web.tsx` source string from a storybook `RouteNode` tree.
+ * Emit a `navigation.tsx` source string from a storybook `RouteNode` tree.
  * Each `book` becomes a layout component (chosen by `format`) wrapping
  * `<Outlet/>`; each `page` becomes a child `<Route>`. The exported `Navigation`
  * component renders a `<Routes>` tree and bridges the runtime `useWebNav`

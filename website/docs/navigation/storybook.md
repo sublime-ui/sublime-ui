@@ -73,7 +73,7 @@ A devkit step turns each storybook into platform artifacts:
 sublime build:nav
 ```
 
-It emits `navigation.native.tsx` (React Navigation), `navigation.web.tsx`
+It emits `navigation.native.tsx` (React Navigation), `navigation.tsx`
 (react-router), and `routes.d.ts` (the typed route map). The platform-resolved
 `<Navigation>` is what your app mounts. Validation runs here too — a 6-page
 `bottomNav`, a duplicate page key, or a dangling link fails the build with a clear

@@ -84,7 +84,7 @@ export default book({
 });
 ```
 
-`sublime build:nav` generates `navigation.web.tsx` (React Router) and a `routes.d.ts`
+`sublime build:nav` generates `navigation.tsx` (React Router) and a `routes.d.ts`
 typed route map. Then:
 
 ```ts
