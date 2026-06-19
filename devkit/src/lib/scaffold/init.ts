@@ -86,6 +86,6 @@ export async function initApp(
   if (!(opts.install ?? true)) log.info('       npm install && npm run build:nav');
   if (targets.includes('web')) log.info('       npm run dev:web');
   if (targets.includes('mobile')) log.info('       npm run dev:mobile');
-  if (targets.includes('desktop')) log.info('       npm run desktop:dev');
+  if (targets.includes('desktop')) log.info('       npm run dev:desktop');
   return 0;
 }

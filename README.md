@@ -64,7 +64,7 @@ desktop), then it scaffolds a complete, runnable app and installs everything:
 ```bash
 cd my-app
 npm run dev:web        # web (Vite)
-npm run desktop:dev    # desktop (Electron)
+npm run dev:desktop    # desktop (Electron)
 npm run dev:mobile     # Android (after `sublime doctor`)
 ```
 

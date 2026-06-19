@@ -1,5 +1,15 @@
 # @sublime-ui/devkit
 
+## 0.1.2
+
+### Patch Changes
+
+- Harmonize the generated app's desktop scripts to match the web/mobile naming:
+  `desktop:dev` → `dev:desktop` and `desktop:build` → `build:desktop`. Scaffolded
+  apps now have a consistent `dev:<target>` / `build:<target>` script set
+  (`dev:web`, `dev:mobile`, `dev:desktop`, …). The `sublime desktop:dev` /
+  `desktop:build` CLI commands are unchanged.
+
 ## 0.1.1
 
 ### Patch Changes

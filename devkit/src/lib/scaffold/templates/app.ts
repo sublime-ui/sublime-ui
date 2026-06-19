@@ -44,8 +44,8 @@ export function renderAppPackageJson(name: string, targets: Target[]): string {
   if (has(targets, 'desktop')) {
     deps['@sublime-ui/desktop'] = SUBLIME_VERSIONS.desktop;
     devDeps['electron'] = PEER_VERSIONS['electron']!;
-    scripts['desktop:dev'] = 'sublime desktop:dev';
-    scripts['desktop:build'] = 'sublime desktop:build';
+    scripts['dev:desktop'] = 'sublime desktop:dev';
+    scripts['build:desktop'] = 'sublime desktop:build';
   }
 
   const pkg = {
@@ -147,7 +147,7 @@ export function renderAppReadme(name: string, targets: Target[]): string {
   ];
   if (has(targets, 'web')) lines.push('npm run dev:web     # web (Vite)');
   if (has(targets, 'mobile')) lines.push('npm run dev:mobile  # Android (debug)');
-  if (has(targets, 'desktop')) lines.push('npm run desktop:dev # Electron');
+  if (has(targets, 'desktop')) lines.push('npm run dev:desktop  # Electron');
   lines.push('```', '');
   return lines.join('\n');
 }

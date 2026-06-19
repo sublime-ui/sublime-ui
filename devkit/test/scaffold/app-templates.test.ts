@@ -13,12 +13,13 @@ describe('app templates', () => {
     expect(pkg.dependencies['@sublime-ui/desktop']).toMatch(/^\^/);
     expect(pkg.scripts['dev:web']).toContain('vite');
     expect(pkg.scripts['build:nav']).toBe('sublime build:nav');
-    expect(pkg.scripts['desktop:dev']).toBe('sublime desktop:dev');
+    expect(pkg.scripts['dev:desktop']).toBe('sublime desktop:dev');
+    expect(pkg.scripts['build:desktop']).toBe('sublime desktop:build');
   });
   it('package.json omits desktop dep + scripts when desktop not selected', () => {
     const pkg = JSON.parse(renderAppPackageJson('my-app', ['web']));
     expect(pkg.dependencies['@sublime-ui/desktop']).toBeUndefined();
-    expect(pkg.scripts['desktop:dev']).toBeUndefined();
+    expect(pkg.scripts['dev:desktop']).toBeUndefined();
     expect(pkg.dependencies['react-native']).toBeUndefined();
   });
   it('sublime.config.json includes a desktop block only with desktop', () => {

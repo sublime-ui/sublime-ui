@@ -94,7 +94,7 @@ Open the printed URL. You'll see the **Tasks** screen (from
 ## Step 5 — Run the desktop app
 
 ```bash
-npm run desktop:dev
+npm run dev:desktop
 ```
 
 This launches the Electron shell, which renders the **same web UI** and adds the
