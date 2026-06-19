@@ -2,7 +2,11 @@
   "name": "@sublime-ui/desktop",
   "version": "0.0.0",
   "type": "module",
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "sideEffects": false,
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./client": { "types": "./dist/client.d.ts", "import": "./dist/client.js" }
+  },
   "files": ["dist", "src"],
   "scripts": {
     "build": "tsup",
