@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "@sublime-ui/library": ["../library/dist/index.d.ts"],
+      "@sublime-ui/library/*": ["../library/dist/*"]
+    }
+  },
+  "include": ["snippets/__generated__/**/*.tsx"]
+}

@@ -24,6 +24,19 @@ const config: Config = {
   // Brand fonts (Strata): Sora · Manrope · IBM Plex Mono — self-hosted, offline-safe.
   clientModules: ['./src/fonts.ts'],
 
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'components',
+        path: 'components',
+        routeBasePath: 'components',
+        sidebarPath: './sidebarsComponents.ts',
+        editUrl: 'https://github.com/sublime-ui/sublime-ui/tree/main/website/',
+      },
+    ],
+  ],
+
   presets: [
     [
       'classic',
@@ -46,6 +59,13 @@ const config: Config = {
       logo: { alt: 'Sublime UI', src: 'img/logo.svg' },
       items: [
         { type: 'docSidebar', sidebarId: 'docs', position: 'left', label: 'Docs' },
+        {
+          type: 'docSidebar',
+          sidebarId: 'componentsSidebar',
+          docsPluginId: 'components',
+          position: 'left',
+          label: 'Components',
+        },
         { href: 'https://github.com/sublime-ui/sublime-ui', label: 'GitHub', position: 'right' },
       ],
     },

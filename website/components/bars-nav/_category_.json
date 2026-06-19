@@ -1,0 +1,5 @@
+{
+  "label": "Bars & Navigation",
+  "position": 4,
+  "link": { "type": "generated-index", "description": "Components for moving around the app: AppBar, GlassAppBar, BottomNav, Drawer." }
+}

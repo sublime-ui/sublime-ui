@@ -6,6 +6,9 @@ dist/
 build/
 *.tsbuildinfo
 
+# Snippet typecheck harness — generated fixtures, never committed
+website/snippets/__generated__/
+
 # Test / coverage
 coverage/
 

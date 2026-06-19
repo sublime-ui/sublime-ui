@@ -29,8 +29,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install
+      - name: Install (website)
         run: npm install --no-audit --no-fund
+      - name: Build library (for snippet typecheck .d.ts)
+        working-directory: .
+        run: |
+          npm install --no-audit --no-fund --legacy-peer-deps
+          npm run build -w @sublime-ui/library
+      - name: Typecheck doc snippets
+        run: npm run check:snippets
       - name: Build
         run: npm run build
       - uses: actions/upload-pages-artifact@v3
