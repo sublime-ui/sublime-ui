@@ -7,6 +7,7 @@ import { input } from '@inquirer/prompts';
 import { makeModel } from './commands/make-model.js';
 import { makeComponent } from './commands/make-component.js';
 import { themeInit } from './commands/theme-init.js';
+import { buildNav } from './commands/build-nav.js';
 import { log } from './util/log.js';
 
 const program = new Command();
@@ -97,6 +98,23 @@ program
   .option('--force', 'overwrite existing files')
   .action(async (opts: { force?: boolean }) => {
     process.exit(await themeInit({ cwd: process.cwd(), force: opts.force ?? false }));
+  });
+
+program
+  .command('build:nav')
+  .description('Compile per-platform storybooks into navigation artifacts')
+  .option('--watch', 'rebuild on storybook changes')
+  .option('--force', 'overwrite generated files')
+  .option('--project <path>', 'project directory', process.cwd())
+  .action(async (opts: { watch?: boolean; force?: boolean; project: string }) => {
+    const code = await buildNav({
+      cwd: opts.project,
+      watch: opts.watch ?? false,
+      force: opts.force ?? false,
+    });
+    // In watch mode, leave the process running so the fs.watch handlers stay
+    // alive; exiting here would tear them down before the first rebuild fires.
+    if (!opts.watch) process.exit(code);
   });
 
 program.parseAsync(process.argv).catch((err: unknown) => {
