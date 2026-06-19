@@ -35,7 +35,7 @@ peers).
 ## Documentation
 
 Core components and theming:
-**https://sublime-ui.github.io/sublime-ui/docs/library/components/overview**
+**https://sublime-ui.github.io/sublime-ui/components/overview**
 
 ## License
 

@@ -90,7 +90,8 @@ Everything lives at **[sublime-ui.github.io/sublime-ui](https://sublime-ui.githu
 - [Getting Started](https://sublime-ui.github.io/sublime-ui/docs/getting-started/scaffold-a-new-app) — scaffold and run your first app
 - [Learning Path](https://sublime-ui.github.io/sublime-ui/docs/learning-path) — basics to advanced
 - [Framework](https://sublime-ui.github.io/sublime-ui/docs/framework/overview),
-  [Library](https://sublime-ui.github.io/sublime-ui/docs/library/components/overview),
+  [Library](https://sublime-ui.github.io/sublime-ui/docs/library/overview),
+  [Components](https://sublime-ui.github.io/sublime-ui/components/overview),
   [Navigation](https://sublime-ui.github.io/sublime-ui/docs/navigation/storybook),
   [Desktop](https://sublime-ui.github.io/sublime-ui/docs/desktop/overview),
   [Devkit](https://sublime-ui.github.io/sublime-ui/docs/devkit)
