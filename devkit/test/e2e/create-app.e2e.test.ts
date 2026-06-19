@@ -36,7 +36,7 @@ describe('create-app e2e (all three targets, real registry)', () => {
     });
     expect(code).toBe(0);
     expect(existsSync(join(app, 'node_modules/@sublime-ui/framework'))).toBe(true);
-    expect(existsSync(join(app, 'src/navigation/navigation.web.tsx'))).toBe(true);
+    expect(existsSync(join(app, 'src/navigation/navigation.tsx'))).toBe(true);
 
     const tc = await execa('npx', ['tsc', '--noEmit'], { cwd: app, reject: false });
     expect(tc.exitCode, tc.stdout + tc.stderr).toBe(0);

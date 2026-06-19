@@ -118,8 +118,14 @@ async function buildOnce(navDir: string, nativeFile: string, webFile: string): P
   const dtsSrc = renderRoutesDts(routes);
 
   // Generated files are owned by the generator: force-overwrite unconditionally.
+  // The web variant is the platform-neutral *base* file (`navigation.tsx`): tsc
+  // and web bundlers resolve `./navigation` to it, while Metro overrides it with
+  // `navigation.native.tsx` on native — the same base/`.native` split as the
+  // `./screens` barrel. Naming it `navigation.web.tsx` would leave `./navigation`
+  // unresolvable for tsc (no base file) and unresolved by default-configured web
+  // bundlers.
   safeWrite(join(navDir, 'navigation.native.tsx'), nativeSrc, true);
-  safeWrite(join(navDir, 'navigation.web.tsx'), webSrc, true);
+  safeWrite(join(navDir, 'navigation.tsx'), webSrc, true);
   safeWrite(join(navDir, 'routes.d.ts'), dtsSrc, true);
   safeWrite(join(navDir, 'index.ts'), BARREL, true);
 

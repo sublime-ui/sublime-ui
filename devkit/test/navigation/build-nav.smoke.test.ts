@@ -97,7 +97,7 @@ describe('buildNav', () => {
     expect(code).toBe(0);
 
     const native = join(navDir, 'navigation.native.tsx');
-    const web = join(navDir, 'navigation.web.tsx');
+    const web = join(navDir, 'navigation.tsx');
     const dts = join(navDir, 'routes.d.ts');
     const barrel = join(navDir, 'index.ts');
 
@@ -132,7 +132,7 @@ describe('buildNav', () => {
     expect(code).not.toBe(0);
 
     expect(existsSync(join(navDir, 'navigation.native.tsx'))).toBe(false);
-    expect(existsSync(join(navDir, 'navigation.web.tsx'))).toBe(false);
+    expect(existsSync(join(navDir, 'navigation.tsx'))).toBe(false);
     expect(existsSync(join(navDir, 'routes.d.ts'))).toBe(false);
     expect(existsSync(join(navDir, 'index.ts'))).toBe(false);
   });

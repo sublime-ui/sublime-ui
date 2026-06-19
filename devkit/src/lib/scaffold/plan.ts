@@ -26,7 +26,7 @@ export function buildScaffoldPlan(opts: { name: string; targets: Target[] }): Sc
   const files: ScaffoldFile[] = [
     { path: 'package.json', contents: renderAppPackageJson(name, targets) },
     { path: 'sublime.config.json', contents: renderSublimeConfig(targets) },
-    { path: 'tsconfig.json', contents: renderTsconfig() },
+    { path: 'tsconfig.json', contents: renderTsconfig(targets) },
     { path: '.gitignore', contents: renderGitignore() },
     { path: 'README.md', contents: renderAppReadme(name, targets) },
     { path: 'src/models/Task.ts', contents: renderTaskModel() },

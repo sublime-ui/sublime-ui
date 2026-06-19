@@ -8,7 +8,10 @@ describe('mobile templates', () => {
   it('mobile screens use Paper Text and the model', () => {
     expect(renderMobileTaskList()).toContain("from 'react-native-paper'");
     expect(renderMobileTaskList()).toContain('Task.rxAll()');
-    expect(renderMobileTaskDetail()).toContain("params<{ id: number }>()");
+    const detail = renderMobileTaskDetail();
+    expect(detail).toContain("import type { AppRoutes } from '../../navigation'");
+    expect(detail).toContain('useNav<AppRoutes>()');
+    expect(detail).toContain("nav.params<'task'>()");
   });
   it('storybook.native uses a mobile format', () => {
     const src = renderStorybookNative();

@@ -28,7 +28,20 @@ describe('app templates', () => {
   it('tsconfig + gitignore + readme render non-empty', () => {
     expect(renderTsconfig()).toContain('"strict": true');
     expect(renderGitignore()).toContain('node_modules');
-    expect(renderGitignore()).toContain('navigation.web.tsx'); // generated nav is ignored
+    expect(renderGitignore()).toContain('navigation.tsx'); // generated nav is ignored
     expect(renderAppReadme('my-app', ['web'])).toContain('my-app');
+  });
+  it('tsconfig adapts types + include to the selected targets', () => {
+    const all = JSON.parse(renderTsconfig(['web', 'mobile', 'desktop']));
+    expect(all.compilerOptions.resolveJsonModule).toBe(true);
+    expect(all.compilerOptions.types).toEqual(['react', 'react-dom', 'node']);
+    // The desktop build configs (forge/webpack) at the desktop root are excluded;
+    // only the app's desktop source is typechecked.
+    expect(all.include).toContain('desktop/src');
+    expect(all.include).not.toContain('desktop');
+
+    const mobileOnly = JSON.parse(renderTsconfig(['mobile']));
+    expect(mobileOnly.compilerOptions.types).toEqual(['react', 'node']); // no react-dom
+    expect(mobileOnly.include).toEqual(['src', 'mobile']);
   });
 });

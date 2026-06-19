@@ -10,7 +10,7 @@
   },
   "include": [
     "src/navigation/navigation.native.tsx",
-    "src/navigation/navigation.web.tsx",
+    "src/navigation/navigation.tsx",
     "src/navigation/routes.d.ts",
     "src/navigation/screens/index.tsx"
   ]

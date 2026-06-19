@@ -11,8 +11,11 @@ describe('web templates', () => {
     expect(src).toContain('Task.rxAll()');
     expect(src).toContain('useNav()');
   });
-  it('TaskDetail reads a typed id param', () => {
-    expect(renderWebTaskDetail()).toContain("params<{ id: number }>()");
+  it('TaskDetail reads a typed id param via the generated route map', () => {
+    const src = renderWebTaskDetail();
+    expect(src).toContain("import type { AppRoutes } from '../../navigation'");
+    expect(src).toContain('useNav<AppRoutes>()');
+    expect(src).toContain("nav.params<'task'>()");
   });
   it('storybook.web uses a web format and 2 pages', () => {
     const src = renderStorybookWeb();

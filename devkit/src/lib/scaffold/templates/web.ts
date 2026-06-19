@@ -24,11 +24,12 @@ export function TaskList() {
 export function renderWebTaskDetail(): string {
   return `import { Screen, Stack } from '@sublime-ui/ui';
 import { useNav } from '@sublime-ui/ui/navigation';
+import type { AppRoutes } from '../../navigation';
 import { Task } from '../../models/Task';
 
 export function TaskDetail() {
-  const nav = useNav();
-  const { id } = nav.params<{ id: number }>();
+  const nav = useNav<AppRoutes>();
+  const { id } = nav.params<'task'>();
   const task = Task.rxFind(id);
   return (
     <Screen>

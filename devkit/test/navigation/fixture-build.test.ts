@@ -23,7 +23,7 @@ const fixtureNav = fileURLToPath(new URL('../fixtures/nav-app/src/navigation/', 
 
 const GENERATED = [
   'navigation.native.tsx',
-  'navigation.web.tsx',
+  'navigation.tsx',
   'routes.d.ts',
   'index.ts',
 ] as const;
