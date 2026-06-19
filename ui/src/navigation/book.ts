@@ -1,6 +1,6 @@
 import type {
   BookDef, Entry, LinkDef, PageDef, PageOptions, PrintFormat, RouteMap,
-} from './types';
+} from './types.js';
 
 export function page<P = void>(component: unknown, options: PageOptions = {}): PageDef<P> {
   return { kind: 'page', component, options };

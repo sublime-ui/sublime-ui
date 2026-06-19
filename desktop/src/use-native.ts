@@ -10,10 +10,10 @@
  * {@link NativeError} so the caller sees a normal rejected promise.
  */
 
-import { createProxy } from './bridge/proxy';
-import { deserializeError } from './errors';
-import type { SerializedError } from './errors';
-import type { NativeMethods } from './types';
+import { createProxy } from './bridge/proxy.js';
+import { deserializeError } from './errors.js';
+import type { SerializedError } from './errors.js';
+import type { NativeMethods } from './types.js';
 
 /** Shape of the bridge exposed at `window.sublimeNative` by the preload. */
 interface SublimeNativeWindow {

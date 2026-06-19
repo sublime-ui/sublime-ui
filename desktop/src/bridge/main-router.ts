@@ -10,8 +10,8 @@
  * promise — gives the proxy a single, structured-clone-safe shape to detect.
  */
 
-import { resolve } from '../registry';
-import { NativeError, serializeError, type SerializedError } from '../errors';
+import { resolve } from '../registry.js';
+import { NativeError, serializeError, type SerializedError } from '../errors.js';
 
 /** Envelope returned over IPC when a native call fails. */
 export interface NativeErrorEnvelope {

@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import type { ViewStyle } from 'react-native';
-import type { SpacerProps } from './Stack.types';
+import type { SpacerProps } from './Stack.types.js';
 
 export function Spacer({ size }: SpacerProps) {
   const style: ViewStyle = {

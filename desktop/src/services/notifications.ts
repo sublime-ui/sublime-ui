@@ -1,5 +1,5 @@
-import { defineNative } from '../define-native';
-import { getElectron } from './get-electron';
+import { defineNative } from '../define-native.js';
+import { getElectron } from './get-electron.js';
 
 /** Options for {@link notifications}'s `notify` method. */
 export interface NotifyOptions {

@@ -15,9 +15,9 @@
  */
 
 // Core authoring + contract types.
-export { defineNative } from './define-native';
-export { registerNative } from './registry';
-export type { NativeMethods, NativeService } from './types';
+export { defineNative } from './define-native.js';
+export { registerNative } from './registry.js';
+export type { NativeMethods, NativeService } from './types.js';
 
 // Typed error transport.
 export {
@@ -25,24 +25,24 @@ export {
   serializeError,
   deserializeError,
   type SerializedError,
-} from './errors';
+} from './errors.js';
 
 // Renderer hook + proxy.
-export { useNative } from './use-native';
-export { createProxy } from './bridge/proxy';
+export { useNative } from './use-native.js';
+export { createProxy } from './bridge/proxy.js';
 
 // Main-process router + preload bridge.
 export {
   installNativeRouter,
   type IpcMainLike,
   type NativeErrorEnvelope,
-} from './bridge/main-router';
+} from './bridge/main-router.js';
 export {
   exposeNativeBridge,
   type ContextBridgeLike,
   type IpcRendererLike,
   type SublimeNativeBridge,
-} from './bridge/preload';
+} from './bridge/preload.js';
 
 // Hardened Electron shell.
 export {
@@ -50,12 +50,12 @@ export {
   type BrowserWindowLike,
   type BrowserWindowCtor,
   type CreateWindowOptions,
-} from './shell/create-window';
+} from './shell/create-window.js';
 export {
   startDesktop,
   type AppLike,
   type StartDesktopOptions,
-} from './shell/main';
+} from './shell/main.js';
 
 // Built-in services.
 export {
@@ -65,4 +65,4 @@ export {
   clipboard,
   notifications,
   type NotifyOptions,
-} from './services/index';
+} from './services/index.js';

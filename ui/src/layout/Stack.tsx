@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import type { FlexAlign, FlexJustify, FlexProps } from './Stack.types';
+import type { FlexAlign, FlexJustify, FlexProps } from './Stack.types.js';
 
 const ALIGN: Record<FlexAlign, CSSProperties['alignItems']> = {
   start: 'flex-start',

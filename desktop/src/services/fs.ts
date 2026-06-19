@@ -1,5 +1,5 @@
 import { readFile, writeFile, readdir, mkdir as mkdirFs, rm, access } from 'node:fs/promises';
-import { defineNative } from '../define-native';
+import { defineNative } from '../define-native.js';
 
 /**
  * Built-in `fs` native service.

@@ -7,7 +7,7 @@
  * which the router treats as an unknown-method rejection.
  */
 
-import type { NativeMethods, NativeService } from './types';
+import type { NativeMethods, NativeService } from './types.js';
 
 const services = new Map<string, NativeService>();
 

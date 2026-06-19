@@ -1,6 +1,6 @@
 import { View } from 'react-native';
 import type { ViewStyle } from 'react-native';
-import type { FlexAlign, FlexJustify, RowProps } from './Stack.types';
+import type { FlexAlign, FlexJustify, RowProps } from './Stack.types.js';
 
 const ALIGN: Record<FlexAlign, ViewStyle['alignItems']> = {
   start: 'flex-start',

@@ -1,4 +1,4 @@
-import type { NativeMethods, NativeService } from './types';
+import type { NativeMethods, NativeService } from './types.js';
 
 /**
  * Author a native service from the main process.

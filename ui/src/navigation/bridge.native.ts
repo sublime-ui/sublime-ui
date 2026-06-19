@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
-import type { Nav } from './nav.types';
+import type { Nav } from './nav.types.js';
 
 export function useNativeNav(): Nav {
   // react-navigation's hook is generic over the app's param list, which is only

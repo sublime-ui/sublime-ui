@@ -17,8 +17,8 @@
  */
 
 // Authoring + contract types (pure — no node/electron).
-export { defineNative } from './define-native';
-export type { NativeMethods, NativeService } from './types';
+export { defineNative } from './define-native.js';
+export type { NativeMethods, NativeService } from './types.js';
 
 // Typed error transport (pure).
 export {
@@ -26,8 +26,8 @@ export {
   serializeError,
   deserializeError,
   type SerializedError,
-} from './errors';
+} from './errors.js';
 
 // Renderer hook + proxy (pure — forward over the single IPC channel only).
-export { useNative } from './use-native';
-export { createProxy } from './bridge/proxy';
+export { useNative } from './use-native.js';
+export { createProxy } from './bridge/proxy.js';

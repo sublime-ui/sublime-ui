@@ -11,8 +11,8 @@
  * derives from the `entry` shape.
  */
 
-import { createWindow, type BrowserWindowCtor } from './create-window';
-import { installNativeRouter, type IpcMainLike } from '../bridge/main-router';
+import { createWindow, type BrowserWindowCtor } from './create-window.js';
+import { installNativeRouter, type IpcMainLike } from '../bridge/main-router.js';
 
 /** Minimal Electron `app` surface needed to bootstrap. Injectable. */
 export interface AppLike {

@@ -1,6 +1,6 @@
 import { createContext, createElement, useContext, type ReactNode } from 'react';
-import type { Nav, TypedNav } from './nav.types';
-import type { RouteMap } from './types';
+import type { Nav, TypedNav } from './nav.types.js';
+import type { RouteMap } from './types.js';
 
 export const NavContext = createContext<Nav | null>(null);
 

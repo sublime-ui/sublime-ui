@@ -1,4 +1,4 @@
-import type { ScreenProps } from './Screen.types';
+import type { ScreenProps } from './Screen.types.js';
 
 export function Screen({ children, padded = true, testID }: ScreenProps) {
   return (

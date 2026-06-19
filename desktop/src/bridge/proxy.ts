@@ -1,4 +1,4 @@
-import type { NativeMethods } from '../types';
+import type { NativeMethods } from '../types.js';
 
 /**
  * Build the renderer-side typed proxy for a native service.

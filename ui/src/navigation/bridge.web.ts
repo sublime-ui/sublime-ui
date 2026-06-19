@@ -1,5 +1,5 @@
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import type { Nav } from './nav.types';
+import type { Nav } from './nav.types.js';
 
 export function useWebNav(
   pathOf: (name: string, params?: unknown) => string,

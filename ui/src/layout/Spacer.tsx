@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import type { SpacerProps } from './Stack.types';
+import type { SpacerProps } from './Stack.types.js';
 
 export function Spacer({ size }: SpacerProps) {
   const style: CSSProperties = {
