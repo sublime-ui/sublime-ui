@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import Database from 'better-sqlite3';
-import { NotFoundError, StorageError } from '@sublime-ui/framework';
+import { NotFoundError, StorageError, type FilterValue } from '@sublime-ui/framework';
 import { SqliteAdapter } from '../src/sqlite/SqliteAdapter.js';
 import type { SqliteDriver } from '../src/sqlite/SqliteDriver.js';
 
@@ -149,8 +149,15 @@ describe('SqliteAdapter — boolean filter binding', () => {
   });
 
   it('in with booleans matches by membership', async () => {
+    // `FilterValue` types `in` arrays as `Array<string | number>`, but rows are
+    // `Record<string, unknown>` and `buildSelect`'s `bindable` coerces boolean
+    // members at the bind site (true->1 / false->0), so a boolean `in` list is
+    // genuinely supported at runtime. The framework type cannot express a boolean
+    // array member, so widen the local literal at the boundary — data and the
+    // assertion below are unchanged; this still exercises the boolean filter.
+    const value = [false] as unknown as FilterValue;
     const out = await adapter.query('notes', {
-      filters: [{ field: 'flag', op: 'in', value: [false] }],
+      filters: [{ field: 'flag', op: 'in', value }],
     });
     expect(out.map((r) => r.id)).toEqual(['n2']);
   });
