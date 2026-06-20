@@ -29,6 +29,7 @@ export {
 
 // Renderer hook + proxy.
 export { useNative } from './use-native.js';
+export { getNative } from './get-native.js';
 export { createProxy } from './bridge/proxy.js';
 
 // Main-process router + preload bridge.
@@ -64,5 +65,10 @@ export {
   shell,
   clipboard,
   notifications,
+  sqlite,
   type NotifyOptions,
 } from './services/index.js';
+
+// Renderer-safe contract type for the sqlite service (type-only; safe to import
+// from the storage desktop driver without crossing into node/better-sqlite3).
+export type { SqliteContract } from './services/sqlite.js';

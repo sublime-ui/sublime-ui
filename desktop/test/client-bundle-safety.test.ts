@@ -82,4 +82,34 @@ describe('renderer bundle safety', () => {
     const offenders = externals.filter((s) => FORBIDDEN.test(s));
     expect(offenders).toEqual([]);
   });
+
+  it('the get-native chain pulls in no node:* or electron specifiers', () => {
+    const externals = reachableExternals(resolvePath(srcDir, 'get-native.ts'));
+    const offenders = externals.filter((s) => FORBIDDEN.test(s));
+    expect(offenders).toEqual([]);
+  });
+
+  it('the client barrel does not transitively reach the sqlite service or better-sqlite3', () => {
+    const externals = reachableExternals(resolvePath(srcDir, 'client.ts'));
+    expect(externals).not.toContain('better-sqlite3');
+    // The main-only sqlite service file must not be reachable from ./client.
+    const seen = new Set<string>();
+    const stack = [resolvePath(srcDir, 'client.ts')];
+    const sqliteFile = resolvePath(srcDir, 'services/sqlite.ts');
+    let reached = false;
+    while (stack.length > 0) {
+      const file = stack.pop() as string;
+      if (seen.has(file)) continue;
+      seen.add(file);
+      if (file === sqliteFile) reached = true;
+      const code = readFileSync(file, 'utf8');
+      for (const spec of importSpecifiers(code)) {
+        if (spec.startsWith('.')) {
+          const local = resolveLocal(file, spec);
+          if (local !== null) stack.push(local);
+        }
+      }
+    }
+    expect(reached).toBe(false);
+  });
 });

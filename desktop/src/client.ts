@@ -30,4 +30,5 @@ export {
 
 // Renderer hook + proxy (pure — forward over the single IPC channel only).
 export { useNative } from './use-native.js';
+export { getNative } from './get-native.js';
 export { createProxy } from './bridge/proxy.js';

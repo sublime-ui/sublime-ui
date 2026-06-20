@@ -6,5 +6,5 @@ export default defineConfig({
   dts: true,
   clean: true,
   bundle: false,
-  external: ['electron', 'react', 'react-dom'],
+  external: ['electron', 'react', 'react-dom', 'better-sqlite3'],
 });
