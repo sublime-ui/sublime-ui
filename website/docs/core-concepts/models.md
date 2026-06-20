@@ -11,15 +11,16 @@ resource, its casts — and that single declaration becomes the home for reading
 writing, and caching that data everywhere your app runs.
 
 You don't wire up stores, reducers, or fetch calls by hand. Calling
-`registerModel` connects the Model to a **Gateway** (where the data actually
-lives, e.g. an API) and auto-generates a **Redux slice** behind the scenes. The
+`registerModel` connects the Model to a **Gateway** — its pluggable backend — and
+auto-generates a **Redux slice** behind the scenes. You choose the backend per
+model: **in-memory** (the default), a **local database**, or a **REST API**. The
 Model is the surface you work with; the plumbing stays out of sight.
 
 Once registered, you talk to your data through expressive commands —
 `all()`, `find()`, `save()`, `delete()` — and read it **reactively** in
 components with `rxAll()` / `rxFind()`. The reactive reads serve **cache-first**:
 they hand back whatever is already loaded immediately, then fetch in the
-background when something is missing or stale.
+background when something is missing.
 
 ```ts
 import { Model, registerModel } from '@sublime-ui/framework';
@@ -39,5 +40,5 @@ const users = User.rxAll();        // reactive, cache-first
 The same Model works unchanged on mobile, web, and desktop — that's the
 "declare once" promise applied to your data layer.
 
-To go deeper — Gateways, casts, the generated slice, and the full command and
-reactive-read surface — see the [Framework overview](/docs/framework/overview).
+To go deeper — choosing a backend, commands, reactive reads, querying, errors,
+and local persistence — see the [Models guide](/docs/framework/models).
