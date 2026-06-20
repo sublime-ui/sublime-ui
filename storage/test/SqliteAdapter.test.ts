@@ -20,9 +20,10 @@ function makeDriver(db: InstanceType<typeof Database>): SqliteDriver {
 }
 
 let adapter: SqliteAdapter;
+let db: InstanceType<typeof Database>;
 
 beforeEach(() => {
-  const db = new Database(':memory:');
+  db = new Database(':memory:');
   adapter = new SqliteAdapter(makeDriver(db));
 });
 
@@ -117,6 +118,36 @@ describe('SqliteAdapter — query (buildSelect)', () => {
 describe('SqliteAdapter — safety', () => {
   it('rejects an injection in the resource/table name', async () => {
     await expect(adapter.ensureCollection('notes; DROP TABLE x')).rejects.toThrow();
+  });
+
+  it('rejects other invalid resource names (a-b, 1bad, a space, lone /)', async () => {
+    await expect(adapter.ensureCollection('a-b')).rejects.toThrow();
+    await expect(adapter.ensureCollection('1bad')).rejects.toThrow();
+    await expect(adapter.ensureCollection('has space')).rejects.toThrow();
+    await expect(adapter.ensureCollection('/')).rejects.toThrow();
+  });
+});
+
+describe('SqliteAdapter — slash-prefixed resource', () => {
+  it('a "/notes" resource round-trips end-to-end, stored in table "notes"', async () => {
+    // The conventional REST resource form is slash-prefixed; ident() strips it.
+    await adapter.ensureCollection('/notes');
+    const created = await adapter.insert('/notes', { id: 'n1', title: 'Hello', pinned: true });
+    expect(created).toEqual({ id: 'n1', title: 'Hello', pinned: true });
+    expect(await adapter.get('/notes', 'n1')).toEqual({ id: 'n1', title: 'Hello', pinned: true });
+
+    // The row physically lives in the un-prefixed table "notes".
+    const raw = db.prepare('SELECT doc FROM "notes" WHERE id = ?').get('n1') as { doc: string };
+    expect(JSON.parse(raw.doc)).toEqual({ id: 'n1', title: 'Hello', pinned: true });
+
+    // update / query / delete also resolve to the same table.
+    await adapter.update('/notes', 'n1', { title: 'Hi' });
+    const queried = await adapter.query('/notes', {
+      filters: [{ field: 'title', op: 'eq', value: 'Hi' }],
+    });
+    expect(queried.map((r) => r.id)).toEqual(['n1']);
+    await adapter.delete('/notes', 'n1');
+    expect(await adapter.get('/notes', 'n1')).toBeNull();
   });
 });
 

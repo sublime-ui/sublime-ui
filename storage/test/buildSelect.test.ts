@@ -8,11 +8,22 @@ describe('ident', () => {
     expect(ident('_x9')).toBe('"_x9"');
   });
 
+  it('strips a single leading slash, then validates the remainder', () => {
+    expect(ident('/notes')).toBe('"notes"');
+    expect(ident('/_x9')).toBe('"_x9"');
+    // Only the FIRST slash is stripped; a second leaves an invalid name.
+    expect(() => ident('//notes')).toThrow();
+  });
+
   it('rejects an invalid table name', () => {
     expect(() => ident('notes; DROP TABLE x')).toThrow();
     expect(() => ident('1bad')).toThrow();
+    expect(() => ident('a-b')).toThrow();
     expect(() => ident('has space')).toThrow();
     expect(() => ident('')).toThrow();
+    expect(() => ident('a;b')).toThrow();
+    // A lone slash → empty after strip → reject.
+    expect(() => ident('/')).toThrow();
   });
 });
 

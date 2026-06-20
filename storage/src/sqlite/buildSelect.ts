@@ -3,15 +3,19 @@ import type { Query, QueryFilter, QuerySort } from '@sublime-ui/framework';
 const TABLE_RE = /^[A-Za-z_][A-Za-z0-9_]*$/;
 
 /**
- * Validate and quote a SQL identifier (table name). Field paths are passed as
+ * Validate and quote a SQL identifier (table name). A single leading `/` is
+ * stripped first, so the conventional slash-prefixed resource form (`/notes`,
+ * matching the REST examples) maps to table `notes`. Field paths are passed as
  * BOUND parameters (`json_extract(doc, ?)`), so only the table name needs
- * identifier validation — anything outside `^[A-Za-z_][A-Za-z0-9_]*$` throws.
+ * identifier validation — the remainder, after stripping, must match
+ * `^[A-Za-z_][A-Za-z0-9_]*$` or this throws (a lone `/` → empty → reject).
  */
 export function ident(name: string): string {
-  if (!TABLE_RE.test(name)) {
+  const table = name.startsWith('/') ? name.slice(1) : name;
+  if (!TABLE_RE.test(table)) {
     throw new Error(`Invalid SQL identifier: ${JSON.stringify(name)}`);
   }
-  return `"${name}"`;
+  return `"${table}"`;
 }
 
 /** `$.field` JSON path for json_extract — bound as a parameter (no injection). */
