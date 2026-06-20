@@ -30,6 +30,19 @@ function likePattern(term: string): string {
 }
 
 /**
+ * Coerce a bound value to a type better-sqlite3 accepts (number, string, bigint,
+ * buffer, null). Rows are stored as `JSON.stringify(row)`, so a boolean field is
+ * a JSON `true`/`false` and `json_extract(doc, '$.flag')` yields the INTEGER 1/0.
+ * A raw JS boolean cannot be bound, so map `true -> 1` and `false -> 0`; then
+ * `json_extract(...) = 1` matches a JSON `true` and `= 0` matches `false`, so
+ * SQLite agrees with the JS `applyQuery` oracle. All other values (string,
+ * number, null) pass through unchanged.
+ */
+function bindable(value: unknown): unknown {
+  return typeof value === 'boolean' ? (value ? 1 : 0) : value;
+}
+
+/**
  * Build a parameterized SELECT over a `(id TEXT PRIMARY KEY, doc TEXT)` table.
  * (SP1 §6.1.) Each filter -> `json_extract(doc, ?) <op> ?` (eq null -> IS NULL;
  * in -> IN (?, …); like -> LIKE ? ESCAPE '\\' wrapping %term%); sort ->
@@ -83,7 +96,7 @@ function filterClause(f: QueryFilter, params: unknown[]): string {
     if (values.length === 0) return '0'; // IN () is invalid SQL; 0 matches nothing
     params.push(jsonPath(f.field));
     const placeholders = values.map((v) => {
-      params.push(v);
+      params.push(bindable(v));
       return '?';
     });
     return `json_extract(doc, ?) IN (${placeholders.join(', ')})`;
@@ -98,7 +111,7 @@ function filterClause(f: QueryFilter, params: unknown[]): string {
     throw new Error(`Unsupported filter op: ${JSON.stringify(f.op)}`);
   }
   params.push(jsonPath(f.field));
-  params.push(f.value);
+  params.push(bindable(f.value));
   return `json_extract(doc, ?) ${sqlOp} ?`;
 }
 

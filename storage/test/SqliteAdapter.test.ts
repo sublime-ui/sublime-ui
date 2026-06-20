@@ -115,6 +115,57 @@ describe('SqliteAdapter — query (buildSelect)', () => {
   });
 });
 
+describe('SqliteAdapter — boolean filter binding', () => {
+  // Regression: a raw JS boolean cannot be bound by better-sqlite3 ("can only
+  // bind numbers, strings, bigints, buffers, and null"). Rows are stored as
+  // JSON.stringify(row), so a boolean field reads back as INTEGER 1/0 via
+  // json_extract; buildSelect must coerce true->1 / false->0 at the bind site.
+  beforeEach(async () => {
+    await adapter.ensureCollection('notes');
+    await adapter.insert('notes', { id: 'n1', title: 'A', flag: true });
+    await adapter.insert('notes', { id: 'n2', title: 'B', flag: false });
+    await adapter.insert('notes', { id: 'n3', title: 'C', flag: true });
+  });
+
+  it('eq true matches only the truthy rows', async () => {
+    const out = await adapter.query('notes', {
+      filters: [{ field: 'flag', op: 'eq', value: true }],
+    });
+    expect(out.map((r) => r.id).sort()).toEqual(['n1', 'n3']);
+  });
+
+  it('eq false matches only the falsy rows', async () => {
+    const out = await adapter.query('notes', {
+      filters: [{ field: 'flag', op: 'eq', value: false }],
+    });
+    expect(out.map((r) => r.id)).toEqual(['n2']);
+  });
+
+  it('ne true matches the falsy rows', async () => {
+    const out = await adapter.query('notes', {
+      filters: [{ field: 'flag', op: 'ne', value: true }],
+    });
+    expect(out.map((r) => r.id)).toEqual(['n2']);
+  });
+
+  it('in with booleans matches by membership', async () => {
+    const out = await adapter.query('notes', {
+      filters: [{ field: 'flag', op: 'in', value: [false] }],
+    });
+    expect(out.map((r) => r.id)).toEqual(['n2']);
+  });
+
+  it('two filters ANDed, one boolean, agrees', async () => {
+    const out = await adapter.query('notes', {
+      filters: [
+        { field: 'title', op: 'eq', value: 'A' },
+        { field: 'flag', op: 'eq', value: true },
+      ],
+    });
+    expect(out.map((r) => r.id)).toEqual(['n1']);
+  });
+});
+
 describe('SqliteAdapter — safety', () => {
   it('rejects an injection in the resource/table name', async () => {
     await expect(adapter.ensureCollection('notes; DROP TABLE x')).rejects.toThrow();
