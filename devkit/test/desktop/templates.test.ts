@@ -74,7 +74,7 @@ describe('desktop templates', () => {
 
     it('exposes the bridge via exposeNativeBridge', () => {
       expect(out).toContain('exposeNativeBridge');
-      expect(out).toContain("from '@sublime-ui/desktop'");
+      expect(out).toContain("from '@sublime-ui/desktop/preload'");
       expect(out).toContain('contextBridge');
       expect(out).toContain('ipcRenderer');
     });

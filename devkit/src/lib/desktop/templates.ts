@@ -87,6 +87,10 @@ export const mainConfig: Configuration = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css', '.json'],
+    extensionAlias: {
+      '.js': ['.ts', '.tsx', '.js'],
+      '.jsx': ['.tsx', '.jsx'],
+    },
   },
 };
 `;
@@ -114,6 +118,13 @@ export const rendererConfig: Configuration = {
   },
   resolve: {
     extensions: ['.js', '.ts', '.jsx', '.tsx', '.css'],
+    // The generated navigation barrel imports with explicit \`.js\` specifiers
+    // (ESM style); map them to the real \`.ts\`/\`.tsx\` sources so webpack resolves
+    // them the way Vite/Metro do.
+    extensionAlias: {
+      '.js': ['.ts', '.tsx', '.js'],
+      '.jsx': ['.tsx', '.jsx'],
+    },
   },
 };
 `;
@@ -141,7 +152,7 @@ startDesktop({
 /** Renders `desktop/src/main/preload.ts`. */
 export function renderPreloadTs(): string {
   return `import { contextBridge, ipcRenderer } from 'electron';
-import { exposeNativeBridge } from '@sublime-ui/desktop';
+import { exposeNativeBridge } from '@sublime-ui/desktop/preload';
 
 // Exposes exactly one function (\`window.sublimeNative.invoke\`) over the single
 // \`native:invoke\` channel — nothing else crosses the isolation boundary.

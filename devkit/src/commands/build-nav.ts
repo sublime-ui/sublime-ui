@@ -1,5 +1,5 @@
 import { join } from 'node:path';
-import { readFileSync, watch as fsWatch, type FSWatcher } from 'node:fs';
+import { existsSync, readFileSync, watch as fsWatch, type FSWatcher } from 'node:fs';
 import { loadConfig } from '../lib/generators/config.js';
 import { analyzeStorybook } from '../lib/navigation/analyze-storybook.js';
 import { validate, type Diagnostic } from '../lib/navigation/validate.js';
@@ -69,19 +69,31 @@ export async function buildNav(opts: BuildNavOptions): Promise<number> {
 
 /** Run a single load → validate → render → write pass. */
 async function buildOnce(navDir: string, nativeFile: string, webFile: string): Promise<number> {
+  // A project only carries the storybooks for the targets it was scaffolded with
+  // (a web-only app has no storybook.native.ts). Analyze only what exists; require
+  // at least one.
+  const hasNative = existsSync(nativeFile);
+  const hasWeb = existsSync(webFile);
+  if (!hasNative && !hasWeb) {
+    log.error(
+      `build:nav: no storybook found in ${navDir} (expected storybook.web.ts and/or storybook.native.ts).`,
+    );
+    return 1;
+  }
+
   let nativeRoot;
   let webRoot;
   try {
-    nativeRoot = analyzeStorybook(nativeFile);
-    webRoot = analyzeStorybook(webFile);
+    nativeRoot = hasNative ? analyzeStorybook(nativeFile) : undefined;
+    webRoot = hasWeb ? analyzeStorybook(webFile) : undefined;
   } catch (err) {
     log.error(err instanceof Error ? err.message : String(err));
     return 1;
   }
 
   const diagnostics = [
-    ...validate(nativeRoot, 'mobile').map((d) => ['native', d] as const),
-    ...validate(webRoot, 'web').map((d) => ['web', d] as const),
+    ...(nativeRoot ? validate(nativeRoot, 'mobile').map((d) => ['native', d] as const) : []),
+    ...(webRoot ? validate(webRoot, 'web').map((d) => ['web', d] as const) : []),
   ];
   if (diagnostics.length > 0) {
     for (const [platform, d] of diagnostics) printDiagnostics(platform, [d]);
@@ -91,14 +103,18 @@ async function buildOnce(navDir: string, nativeFile: string, webFile: string): P
 
   // Param types are erased by the runtime import; recover the explicit
   // `page<...>()` type arguments by scanning each platform's source.
-  const nativeParams = extractParams(readFileSync(nativeFile, 'utf8'));
-  const webParams = extractParams(readFileSync(webFile, 'utf8'));
+  const nativeParams = hasNative
+    ? extractParams(readFileSync(nativeFile, 'utf8'))
+    : new Map<string, string>();
+  const webParams = hasWeb
+    ? extractParams(readFileSync(webFile, 'utf8'))
+    : new Map<string, string>();
 
   // Each platform may have its own pages (spec §2.4/§10) — union both flattened
   // trees into one AppRoutes route map; conflicting param types are an error.
   const { routes, conflicts } = mergeRouteParams({
-    nativeKeys: flatten(nativeRoot).routes.map((r) => r.key),
-    webKeys: flatten(webRoot).routes.map((r) => r.key),
+    nativeKeys: nativeRoot ? flatten(nativeRoot).routes.map((r) => r.key) : [],
+    webKeys: webRoot ? flatten(webRoot).routes.map((r) => r.key) : [],
     nativeParams,
     webParams,
   });
@@ -113,23 +129,33 @@ async function buildOnce(navDir: string, nativeFile: string, webFile: string): P
     return 1;
   }
 
-  const nativeSrc = renderNative(nativeRoot, { screensImport: SCREENS_IMPORT });
-  const webSrc = renderWeb(webRoot, { screensImport: SCREENS_IMPORT });
   const dtsSrc = renderRoutesDts(routes);
 
   // Generated files are owned by the generator: force-overwrite unconditionally.
-  // The web variant is the platform-neutral *base* file (`navigation.tsx`): tsc
-  // and web bundlers resolve `./navigation` to it, while Metro overrides it with
+  // Only the platforms that actually have a storybook get a navigation file. The
+  // web variant is the platform-neutral *base* file (`navigation.tsx`): tsc and web
+  // bundlers resolve `./navigation` to it, while Metro overrides it with
   // `navigation.native.tsx` on native — the same base/`.native` split as the
-  // `./screens` barrel. Naming it `navigation.web.tsx` would leave `./navigation`
-  // unresolvable for tsc (no base file) and unresolved by default-configured web
-  // bundlers.
-  safeWrite(join(navDir, 'navigation.native.tsx'), nativeSrc, true);
-  safeWrite(join(navDir, 'navigation.tsx'), webSrc, true);
+  // `./screens` barrel.
+  if (nativeRoot) {
+    safeWrite(
+      join(navDir, 'navigation.native.tsx'),
+      renderNative(nativeRoot, { screensImport: SCREENS_IMPORT }),
+      true,
+    );
+  }
+  if (webRoot) {
+    safeWrite(
+      join(navDir, 'navigation.tsx'),
+      renderWeb(webRoot, { screensImport: SCREENS_IMPORT }),
+      true,
+    );
+  }
   safeWrite(join(navDir, 'routes.d.ts'), dtsSrc, true);
   safeWrite(join(navDir, 'index.ts'), BARREL, true);
 
-  log.success(`build:nav wrote 4 files to ${navDir}`);
+  const count = (nativeRoot ? 1 : 0) + (webRoot ? 1 : 0) + 2;
+  log.success(`build:nav wrote ${count} files to ${navDir}`);
   return 0;
 }
 

@@ -34,6 +34,10 @@
     "./client": {
       "types": "./dist/client.d.ts",
       "import": "./dist/client.js"
+    },
+    "./preload": {
+      "types": "./dist/bridge/preload.d.ts",
+      "import": "./dist/bridge/preload.js"
     }
   },
   "files": [

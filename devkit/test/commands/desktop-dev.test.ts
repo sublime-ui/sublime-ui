@@ -13,7 +13,7 @@ afterEach(() => {
 });
 
 describe('desktopDev', () => {
-  it('runs electron-forge start in the default desktop dir and returns the runner code', async () => {
+  it('runs npm start in the default desktop dir and returns the runner code', async () => {
     const calls: Array<{ cmd: string; args: string[]; cwd: string }> = [];
     const code = await desktopDev({
       project: dir,
@@ -24,7 +24,7 @@ describe('desktopDev', () => {
     });
     expect(code).toBe(0);
     expect(calls).toHaveLength(1);
-    expect(calls[0]?.cmd).toBe('electron-forge');
+    expect(calls[0]?.cmd).toBe('npm');
     expect(calls[0]?.args).toEqual(['start']);
     expect(calls[0]?.cwd).toBe(join(dir, 'desktop'));
   });

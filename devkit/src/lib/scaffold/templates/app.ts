@@ -32,6 +32,9 @@ export function renderAppPackageJson(name: string, targets: Target[]): string {
     scripts['build:web'] = 'vite build';
   }
   if (has(targets, 'mobile')) {
+    // `sublime build` runs `expo prebuild`; pin expo to the RN-compatible SDK so
+    // `npx expo` uses the project's version instead of auto-installing latest.
+    deps['expo'] = PEER_VERSIONS['expo'] ?? '~52.0.0';
     deps['react-native'] = PEER_VERSIONS['react-native']!;
     deps['react-native-paper'] = PEER_VERSIONS['react-native-paper']!;
     deps['react-native-safe-area-context'] = PEER_VERSIONS['react-native-safe-area-context']!;

@@ -41,7 +41,7 @@ export function buildScaffoldPlan(opts: { name: string; targets: Target[] }): Sc
       { path: 'src/screens/web/TaskDetail.tsx', contents: renderWebTaskDetail() },
       { path: 'src/navigation/screens.ts', contents: renderWebScreensBarrel() },
       { path: 'src/navigation/storybook.web.ts', contents: renderStorybookWeb() },
-      { path: 'web/index.html', contents: renderWebIndexHtml(name) },
+      { path: 'index.html', contents: renderWebIndexHtml(name) },
       { path: 'web/main.tsx', contents: renderWebMain() },
       { path: 'vite.config.ts', contents: renderViteConfig() },
     );
@@ -55,7 +55,21 @@ export function buildScaffoldPlan(opts: { name: string; targets: Target[] }): Sc
       { path: 'src/navigation/storybook.native.ts', contents: renderStorybookNative() },
       { path: 'mobile/index.js', contents: renderMobileEntry() },
       { path: 'mobile/App.native.tsx', contents: renderMobileApp() },
-      { path: 'app.json', contents: JSON.stringify({ name }, null, 2) + '\n' },
+      {
+        path: 'app.json',
+        contents:
+          JSON.stringify(
+            {
+              expo: {
+                name,
+                slug: name,
+                android: { package: `com.sublime.${name.replace(/[^a-z0-9]/gi, '').toLowerCase()}` },
+              },
+            },
+            null,
+            2,
+          ) + '\n',
+      },
     );
   }
 

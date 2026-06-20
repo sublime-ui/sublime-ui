@@ -78,6 +78,16 @@ export async function initApp(
     if (installCode !== 0) { log.warn('npm install failed — run it manually.'); return 0; }
     log.step('Compiling navigation (build:nav)…');
     await runner('npx', ['sublime', 'build:nav'], opts.dir);
+    if (targets.includes('desktop')) {
+      // The desktop/ Electron Forge package is a nested npm project; its deps
+      // (electron-forge CLI, makers, loaders) live in desktop/node_modules and are
+      // not installed by the app-root install.
+      log.step('Installing desktop (Electron Forge) dependencies…');
+      const desktopCode = await runner('npm', ['install', '--legacy-peer-deps'], join(opts.dir, 'desktop'));
+      if (desktopCode !== 0) {
+        log.warn('desktop dependency install failed — run "npm install" in desktop/ manually.');
+      }
+    }
   }
 
   // Next steps.
