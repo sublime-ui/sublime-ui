@@ -6,10 +6,23 @@ import {
   parseAdbVersion,
 } from './detect.js';
 import { REQUIREMENTS } from './requirements.js';
+import { managedSdkDir, hasCmdlineTools } from './android-sdk.js';
+import { sublimeHomeDir, hasJava } from './jdk.js';
 import type { Probes } from './doctor-report.js';
 
 export function resolveAndroidHome(env: NodeJS.ProcessEnv): string | null {
   return env['ANDROID_HOME'] ?? env['ANDROID_SDK_ROOT'] ?? null;
+}
+
+/** Resolves the effective Android SDK: env first, else the managed SDK. */
+export function resolveAndroidSdk(
+  env: NodeJS.ProcessEnv,
+): { path: string | null; source: 'env' | 'managed' | null } {
+  const fromEnv = resolveAndroidHome(env);
+  if (fromEnv !== null) return { path: fromEnv, source: 'env' };
+  const managed = managedSdkDir();
+  if (hasCmdlineTools(managed)) return { path: managed, source: 'managed' };
+  return { path: null, source: null };
 }
 
 export function sdkmanagerPath(androidHome: string): string {
@@ -25,8 +38,22 @@ export function legacySdkmanagerPath(androidHome: string): string {
 
 export async function gatherProbes(): Promise<Probes> {
   const nodeRes = await run(process.execPath, ['-v']);
-  const javaRes = await run('java', ['-version']);
-  const androidHome = resolveAndroidHome(process.env);
+
+  // Prefer the managed JDK; fall back to PATH `java`.
+  const managedJdk = join(sublimeHomeDir(), 'jdk-17');
+  let jdk17: string | null = null;
+  let jdkSource: 'managed' | 'path' | undefined;
+  if (hasJava(managedJdk)) {
+    const res = await run(join(managedJdk, 'bin', process.platform === 'win32' ? 'java.exe' : 'java'), ['-version']);
+    jdk17 = parseJavaVersion(res.stderr);
+    jdkSource = 'managed';
+  } else {
+    const res = await run('java', ['-version']);
+    jdk17 = parseJavaVersion(res.stderr);
+    if (jdk17 !== null) jdkSource = 'path';
+  }
+
+  const { path: androidHome, source: androidHomeSource } = resolveAndroidSdk(process.env);
 
   let sdkmanager = false;
   let ndk: string | null = null;
@@ -52,8 +79,10 @@ export async function gatherProbes(): Promise<Probes> {
 
   return {
     node: nodeRes.stdout.trim() || null,
-    jdk17: parseJavaVersion(javaRes.stderr),
+    jdk17,
+    ...(jdkSource ? { jdkSource } : {}),
     androidHome,
+    ...(androidHomeSource ? { androidHomeSource } : {}),
     sdkmanager,
     platformTools: parseAdbVersion(adbRes.stdout) !== null,
     ndk,

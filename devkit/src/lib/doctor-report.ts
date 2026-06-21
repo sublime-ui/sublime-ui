@@ -8,7 +8,9 @@ import type { TableRow } from '../util/log.js';
 export interface Probes {
   node: string | null;
   jdk17: string | null;
+  jdkSource?: 'managed' | 'path';
   androidHome: string | null;
+  androidHomeSource?: 'env' | 'managed';
   sdkmanager: boolean;
   platformTools: boolean;
   ndk: string | null;
@@ -30,12 +32,16 @@ export function buildDoctorReport(probes: Probes): DoctorReport {
     {
       label: 'JDK 17',
       ok: satisfiesMajor(probes.jdk17, REQUIREMENTS.jdk.major),
-      detail: probes.jdk17 ?? 'not found (run: sublime setup)',
+      detail: probes.jdk17
+        ? `${probes.jdk17}${probes.jdkSource ? ` (${probes.jdkSource})` : ''}`
+        : 'not found (run: sublime setup)',
     },
     {
       label: 'ANDROID_HOME',
       ok: probes.androidHome !== null,
-      detail: probes.androidHome ?? 'not set',
+      detail: probes.androidHome
+        ? `${probes.androidHome}${probes.androidHomeSource ? ` (${probes.androidHomeSource})` : ''}`
+        : 'not set (run: sublime setup)',
     },
     {
       label: 'sdkmanager',

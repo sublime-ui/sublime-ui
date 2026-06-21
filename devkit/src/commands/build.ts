@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync, statSync, mkdirSync, copyFileSync } from 'node:fs';
 import { join, basename } from 'node:path';
-import { ensurePortableJdk17 } from '../lib/jdk.js';
-import { resolveAndroidHome } from '../lib/probe.js';
+import { ensureManagedJdk17 } from '../lib/jdk.js';
+import { resolveAndroidSdk } from '../lib/probe.js';
 import { runGradleWithHealing } from '../lib/gradle.js';
 import { runInherit } from '../util/exec.js';
 import { log } from '../util/log.js';
@@ -56,9 +56,9 @@ export async function buildCommand(opts: {
   release: boolean;
   aab: boolean;
 }): Promise<number> {
-  const androidHome = resolveAndroidHome(process.env);
+  const { path: androidHome } = resolveAndroidSdk(process.env);
   if (androidHome === null) {
-    log.error('ANDROID_HOME/ANDROID_SDK_ROOT not set. Run: sublime doctor');
+    log.error('No Android SDK found. Run: sublime setup');
     return 1;
   }
 
@@ -77,7 +77,7 @@ export async function buildCommand(opts: {
 
   // 2. Ensure local.properties + scoped JDK 17.
   ensureLocalProperties(opts.project, androidHome);
-  const jdk17Home = await ensurePortableJdk17();
+  const jdk17Home = await ensureManagedJdk17();
 
   // 3. Scoped, self-healing Gradle build. runGradleWithHealing resolves on
   //    success and THROWS on failure (after bounded retries / unrecoverable

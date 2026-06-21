@@ -19,6 +19,18 @@ describe('buildDoctorReport', () => {
     expect(report.rows).toHaveLength(7);
   });
 
+  it('annotates the ANDROID_HOME and JDK rows with their source', () => {
+    const report = buildDoctorReport({
+      ...fullyEquipped,
+      androidHomeSource: 'managed',
+      jdkSource: 'managed',
+    });
+    const androidRow = report.rows.find((r) => r.label.includes('ANDROID_HOME'));
+    const jdkRow = report.rows.find((r) => r.label.includes('JDK'));
+    expect(androidRow?.detail).toContain('(managed)');
+    expect(jdkRow?.detail).toContain('(managed)');
+  });
+
   it('flags a broken env and is not ok', () => {
     const report = buildDoctorReport({
       ...fullyEquipped,

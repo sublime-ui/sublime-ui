@@ -11,10 +11,12 @@ vi.mock('../src/util/exec.js', () => ({ run: (...a: unknown[]) => runMock(...a) 
 
 import {
   resolveAndroidHome,
+  resolveAndroidSdk,
   sdkmanagerPath,
   legacySdkmanagerPath,
   gatherProbes,
 } from '../src/lib/probe.js';
+import { managedSdkDir } from '../src/lib/android-sdk.js';
 
 describe('resolveAndroidHome', () => {
   it('prefers ANDROID_HOME', () => {
@@ -25,6 +27,23 @@ describe('resolveAndroidHome', () => {
   });
   it('returns null when neither is set', () => {
     expect(resolveAndroidHome({})).toBeNull();
+  });
+});
+
+describe('resolveAndroidSdk (managed fallback)', () => {
+  it('prefers an env ANDROID_HOME and marks the source env', () => {
+    existsSyncMock.mockReturnValue(true);
+    expect(resolveAndroidSdk({ ANDROID_HOME: '/a' })).toEqual({ path: '/a', source: 'env' });
+  });
+  it('falls back to the managed SDK when env is unset and cmdline-tools exist', () => {
+    const smPath = join(managedSdkDir(), 'cmdline-tools', 'latest', 'bin',
+      process.platform === 'win32' ? 'sdkmanager.bat' : 'sdkmanager');
+    existsSyncMock.mockImplementation((p: string) => p === smPath);
+    expect(resolveAndroidSdk({})).toEqual({ path: managedSdkDir(), source: 'managed' });
+  });
+  it('returns null when env is unset and no managed SDK exists', () => {
+    existsSyncMock.mockReturnValue(false);
+    expect(resolveAndroidSdk({})).toEqual({ path: null, source: null });
   });
 });
 
@@ -99,14 +118,15 @@ describe('gatherProbes (filesystem detection)', () => {
     expect(probes.cmake).toBeNull();
   });
 
-  it('skips SDK probing entirely when ANDROID_HOME is unset', async () => {
+  it('reports no SDK when ANDROID_HOME is unset and no managed SDK exists', async () => {
+    // Env unset + nothing on disk (no managed SDK) → resolveAndroidSdk yields
+    // null, so the filesystem SDK-probing block is skipped entirely.
     process.env = { ...ORIGINAL_ENV, ANDROID_HOME: undefined, ANDROID_SDK_ROOT: undefined } as NodeJS.ProcessEnv;
-    existsSyncMock.mockReturnValue(true); // would be true, but must not be consulted
+    existsSyncMock.mockReturnValue(false);
     const probes = await gatherProbes();
     expect(probes.androidHome).toBeNull();
     expect(probes.sdkmanager).toBe(false);
     expect(probes.ndk).toBeNull();
     expect(probes.cmake).toBeNull();
-    expect(existsSyncMock).not.toHaveBeenCalled();
   });
 });
