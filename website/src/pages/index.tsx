@@ -45,6 +45,7 @@ const MARKUP = String.raw`
       <div class="su-nav-links" style="display:flex; align-items:center; gap:30px; font-family:'Manrope'; font-size:14.5px; font-weight:600; color:#5A5750;">
         <a href="%DOCS%">Docs</a>
         <a href="#framework">Framework</a>
+        <a href="#data">Data</a>
         <a href="#navigation">Navigation</a>
         <a href="#desktop">Desktop</a>
       </div>
@@ -59,10 +60,10 @@ const MARKUP = String.raw`
     <div>
       <div style="display:inline-flex; align-items:center; gap:9px; font-family:'IBM Plex Mono'; font-size:12px; font-weight:500; letter-spacing:0.04em; color:#A0561A; background:#FBF4E6; border:1px solid #EBDCC0; padding:6px 13px; border-radius:999px; margin-bottom:26px;">
         <span style="width:6px; height:6px; border-radius:50%; background:#E07A0B; display:inline-block;"></span>
-        TypeScript-only · v1.0
+        TypeScript-only · cross-platform
       </div>
       <h1 style="font-family:'Sora'; font-size:55px; font-weight:800; letter-spacing:-0.035em; line-height:1.02; color:#1E1B16; margin:0 0 22px;">Write your app once.<br>Ship it <span style="color:#E07A0B;">native</span> on mobile, web, and desktop.</h1>
-      <p style="font-family:'Manrope'; font-size:18px; line-height:1.55; color:#5A5750; margin:0 0 34px; max-width:520px;">One TypeScript codebase. Real platform-native UI on every target — no lowest-common-denominator widgets, no runtime guesswork. Just your model, compiled everywhere.</p>
+      <p style="font-family:'Manrope'; font-size:18px; line-height:1.55; color:#5A5750; margin:0 0 34px; max-width:520px;">One TypeScript codebase, compiled to real native UI on mobile, web, and desktop. The data layer is built in — local-first storage and REST behind a single model, so you never hand-write a <code style="font-family:'IBM Plex Mono'; font-size:15px; color:#A0561A;">fetch</code> or a line of SQL.</p>
       <div style="display:flex; align-items:center; gap:14px;">
         <a href="%DOCS%" style="display:inline-flex; align-items:center; gap:9px; font-family:'Sora'; font-size:15.5px; font-weight:700; color:#FBF3E2; background:#E07A0B; padding:14px 26px; border-radius:13px; box-shadow:0 10px 24px -8px rgba(224,122,11,0.55);">
           Get started
@@ -82,19 +83,19 @@ const MARKUP = String.raw`
         <span style="width:11px; height:11px; border-radius:50%; background:#3A352B; display:inline-block;"></span>
         <span style="width:11px; height:11px; border-radius:50%; background:#3A352B; display:inline-block;"></span>
         <span style="width:11px; height:11px; border-radius:50%; background:#3A352B; display:inline-block;"></span>
-        <span style="font-family:'IBM Plex Mono'; font-size:12px; color:#7C7568; margin-left:8px;">models/user.ts</span>
+        <span style="font-family:'IBM Plex Mono'; font-size:12px; color:#7C7568; margin-left:8px;">models/todo.ts</span>
       </div>
-      <pre style="margin:0; padding:24px 22px; font-family:'IBM Plex Mono'; font-size:13.5px; line-height:1.75; color:#D8D1C4; overflow-x:auto;"><span style="color:#C98A3C;">import</span> { Model } <span style="color:#C98A3C;">from</span> <span style="color:#8FB573;">'@sublime-ui/framework'</span>;
+      <pre style="margin:0; padding:24px 22px; font-family:'IBM Plex Mono'; font-size:13.5px; line-height:1.75; color:#D8D1C4; overflow-x:auto;"><span style="color:#C98A3C;">import</span> { Model, registerModel, DbGateway } <span style="color:#C98A3C;">from</span> <span style="color:#8FB573;">'@sublime-ui/framework'</span>;
 
-<span style="color:#C98A3C;">export class</span> <span style="color:#F2A33A;">User</span> <span style="color:#C98A3C;">extends</span> <span style="color:#F2A33A;">Model</span> {
-  <span style="color:#C98A3C;">declare</span> id:   <span style="color:#7FA8D8;">number</span>;
-  <span style="color:#C98A3C;">declare</span> name: <span style="color:#7FA8D8;">string</span>;
-  <span style="color:#C98A3C;">declare</span> role: <span style="color:#8FB573;">'admin'</span> | <span style="color:#8FB573;">'member'</span>;
+<span style="color:#C98A3C;">export class</span> <span style="color:#F2A33A;">Todo</span> <span style="color:#C98A3C;">extends</span> <span style="color:#F2A33A;">Model</span> {
+  <span style="color:#C98A3C;">protected static</span> resource = <span style="color:#8FB573;">'/todos'</span>;
+  <span style="color:#C98A3C;">declare</span> id:    <span style="color:#7FA8D8;">string</span>;
+  <span style="color:#C98A3C;">declare</span> title: <span style="color:#7FA8D8;">string</span>;
+  <span style="color:#C98A3C;">declare</span> done:  <span style="color:#7FA8D8;">boolean</span>;
 }
 
-<span style="color:#6B6557;">// → typed store, native UI, and</span>
-<span style="color:#6B6557;">// → API bridge generated at compile time</span>
-<span style="color:#C98A3C;">const</span> users = <span style="color:#F2A33A;">User</span>.<span style="color:#7FA8D8;">all</span>();</pre>
+<span style="color:#6B6557;">// persisted to the local DB, reactive everywhere</span>
+<span style="color:#7FA8D8;">registerModel</span>(<span style="color:#F2A33A;">Todo</span>, <span style="color:#F2A33A;">DbGateway</span>);</pre>
     </div>
   </section>
 
@@ -133,12 +134,69 @@ const MARKUP = String.raw`
     </div>
   </section>
 
+  <section id="data" style="padding:56px 4px;">
+    <div style="background:#fff; border-radius:24px; box-shadow:0 1px 2px rgba(20,28,48,0.04), 0 24px 60px -34px rgba(20,28,48,0.28); display:grid; grid-template-columns:0.96fr 1.04fr; gap:48px; align-items:center; padding:52px 52px; overflow:hidden;">
+      <div>
+        <div style="font-family:'IBM Plex Mono'; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:#A0561A; margin-bottom:14px;">Agnostic data layer</div>
+        <h2 style="font-family:'Sora'; font-size:32px; font-weight:800; letter-spacing:-0.03em; color:#1E1B16; margin:0 0 18px;">Your model talks to a Gateway — never to <span style="color:#E07A0B;">fetch()</span> or SQL.</h2>
+        <p style="font-family:'Manrope'; font-size:16px; line-height:1.6; color:#5A5750; margin:0 0 22px;">Pick a backend per model — a <strong style="color:#1E1B16;">local database</strong> or a <strong style="color:#1E1B16;">REST API</strong>. The model API is identical either way: Sublime UI makes the RESTful calls and opens the database connections for you, typed end to end. You write models, not plumbing.</p>
+        <div style="display:flex; flex-direction:column; gap:13px;">
+          <div style="display:flex; align-items:center; gap:11px; font-family:'Manrope'; font-size:14.5px; font-weight:600; color:#3A372F;"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="#E07A0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 4.5L6 12 2.5 8.5"/></svg> Swap DB ↔ REST — your screens don't change</div>
+          <div style="display:flex; align-items:center; gap:11px; font-family:'Manrope'; font-size:14.5px; font-weight:600; color:#3A372F;"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="#E07A0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 4.5L6 12 2.5 8.5"/></svg> Automatic RESTful calls &amp; DB connections</div>
+          <div style="display:flex; align-items:center; gap:11px; font-family:'Manrope'; font-size:14.5px; font-weight:600; color:#3A372F;"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="#E07A0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 4.5L6 12 2.5 8.5"/></svg> Reactive reads, offline-first writes</div>
+        </div>
+      </div>
+      <div style="background:#15130F; border-radius:16px; box-shadow:0 24px 50px -28px rgba(20,28,48,0.5); overflow:hidden;">
+        <div style="display:flex; align-items:center; gap:8px; padding:14px 18px; border-bottom:1px solid #2A261E;">
+          <span style="width:10px; height:10px; border-radius:50%; background:#3A352B;"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:#3A352B;"></span>
+          <span style="width:10px; height:10px; border-radius:50%; background:#3A352B;"></span>
+          <span style="font-family:'IBM Plex Mono'; font-size:11.5px; color:#7C7568; margin-left:8px;">app/data.ts</span>
+        </div>
+        <pre style="margin:0; padding:22px; font-family:'IBM Plex Mono'; font-size:13px; line-height:1.7; color:#D8D1C4; overflow-x:auto;"><span style="color:#6B6557;">// local-first → IndexedDB (web) · SQLite (native)</span>
+<span style="color:#7FA8D8;">registerModel</span>(<span style="color:#F2A33A;">Todo</span>, <span style="color:#F2A33A;">DbGateway</span>);
+
+<span style="color:#6B6557;">// REST API → GET / POST / PUT / DELETE</span>
+<span style="color:#7FA8D8;">registerModel</span>(<span style="color:#F2A33A;">Post</span>, <span style="color:#F2A33A;">HttpGateway</span>);
+
+<span style="color:#6B6557;">// same model API either way:</span>
+<span style="color:#C98A3C;">const</span> posts = <span style="color:#F2A33A;">Post</span>.<span style="color:#7FA8D8;">rxAll</span>();          <span style="color:#6B6557;">// reactive</span>
+<span style="color:#C98A3C;">await</span> <span style="color:#F2A33A;">Post</span>.<span style="color:#7FA8D8;">make</span>({ title }).<span style="color:#7FA8D8;">save</span>(); <span style="color:#6B6557;">// no fetch</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding:8px 4px 56px;">
+    <div style="background:#fff; border-radius:24px; box-shadow:0 1px 2px rgba(20,28,48,0.04), 0 18px 48px -30px rgba(20,28,48,0.24); padding:48px 48px 44px;">
+      <div style="font-family:'IBM Plex Mono'; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:#A0561A; margin-bottom:14px;">One codebase</div>
+      <h2 style="font-family:'Sora'; font-size:32px; font-weight:800; letter-spacing:-0.03em; color:#1E1B16; margin:0 0 12px; max-width:620px;">One source. Three real builds.</h2>
+      <p style="font-family:'Manrope'; font-size:16px; line-height:1.6; color:#5A5750; margin:0 0 34px; max-width:560px;">The same project compiles to a genuinely native app on every target — no forks, no per-platform repos, no rewrite. Build them all from one command line.</p>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:18px;">
+        <div style="border:1px solid #ECEAE4; border-radius:16px; padding:22px 22px 24px; display:flex; flex-direction:column; gap:14px;">
+          <div style="font-family:'Sora'; font-size:16px; font-weight:700; color:#1E1B16;">Mobile</div>
+          <code style="font-family:'IBM Plex Mono'; font-size:12.5px; color:#D8D1C4; background:#15130F; padding:11px 13px; border-radius:9px; display:block;"><span style="color:#C98A3C;">$</span> sublime build</code>
+          <span style="font-family:'Manrope'; font-size:13.5px; color:#6B675F;">→ Android APK / AAB · iOS</span>
+        </div>
+        <div style="border:1px solid #ECEAE4; border-radius:16px; padding:22px 22px 24px; display:flex; flex-direction:column; gap:14px;">
+          <div style="font-family:'Sora'; font-size:16px; font-weight:700; color:#1E1B16;">Web</div>
+          <code style="font-family:'IBM Plex Mono'; font-size:12.5px; color:#D8D1C4; background:#15130F; padding:11px 13px; border-radius:9px; display:block;"><span style="color:#C98A3C;">$</span> npm run build:web</code>
+          <span style="font-family:'Manrope'; font-size:13.5px; color:#6B675F;">→ static bundle (Vite)</span>
+        </div>
+        <div style="border:1px solid #ECEAE4; border-radius:16px; padding:22px 22px 24px; display:flex; flex-direction:column; gap:14px;">
+          <div style="font-family:'Sora'; font-size:16px; font-weight:700; color:#1E1B16;">Desktop</div>
+          <code style="font-family:'IBM Plex Mono'; font-size:12.5px; color:#D8D1C4; background:#15130F; padding:11px 13px; border-radius:9px; display:block;"><span style="color:#C98A3C;">$</span> sublime desktop:build</code>
+          <span style="font-family:'Manrope'; font-size:13.5px; color:#6B675F;">→ macOS · Windows · Linux</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="navigation" style="padding:56px 4px;">
     <div style="background:#fff; border-radius:24px; box-shadow:0 1px 2px rgba(20,28,48,0.04), 0 24px 60px -34px rgba(20,28,48,0.28); display:grid; grid-template-columns:0.92fr 1.08fr; gap:48px; align-items:center; padding:52px 52px; overflow:hidden;">
       <div>
         <div style="font-family:'IBM Plex Mono'; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:#A0561A; margin-bottom:14px;">Storybook navigation</div>
         <h2 style="font-family:'Sora'; font-size:32px; font-weight:800; letter-spacing:-0.03em; color:#1E1B16; margin:0 0 18px;">Describe your screens. Get native routing for free.</h2>
-        <p style="font-family:'Manrope'; font-size:16px; line-height:1.6; color:#5A5750; margin:0 0 22px;">Declare a <strong style="color:#1E1B16;">book</strong> of pages once and pick a format. Sublime UI compiles it to <strong style="color:#1E1B16;">React Navigation</strong> on mobile and <strong style="color:#1E1B16;">react-router</strong> on web — fully typed links, params, and deep links included.</p>
+        <p style="font-family:'Manrope'; font-size:16px; line-height:1.6; color:#5A5750; margin:0 0 22px;">Declare a <strong style="color:#1E1B16;">book</strong> of pages once and pick a format. Sublime UI compiles it to <strong style="color:#1E1B16;">React Navigation</strong> on mobile and <strong style="color:#1E1B16;">react-router</strong> on web — fully typed links, params, and deep links included. On mobile, every screen gets the shipped <strong style="color:#1E1B16;">AppBar</strong> header automatically.</p>
         <div style="display:flex; flex-direction:column; gap:13px;">
           <div style="display:flex; align-items:center; gap:11px; font-family:'Manrope'; font-size:14.5px; font-weight:600; color:#3A372F;"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="#E07A0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 4.5L6 12 2.5 8.5"/></svg> Typed routes — no string-keyed mistakes</div>
           <div style="display:flex; align-items:center; gap:11px; font-family:'Manrope'; font-size:14.5px; font-weight:600; color:#3A372F;"><svg width="17" height="17" viewBox="0 0 16 16" fill="none" stroke="#E07A0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13.5 4.5L6 12 2.5 8.5"/></svg> Swap layout formats without touching pages</div>
@@ -155,13 +213,13 @@ const MARKUP = String.raw`
         <pre style="margin:0; padding:22px; font-family:'IBM Plex Mono'; font-size:13px; line-height:1.7; color:#D8D1C4; overflow-x:auto;"><span style="color:#C98A3C;">export default</span> <span style="color:#7FA8D8;">book</span>({
   format: <span style="color:#8FB573;">'bottomNav'</span>,
   pages: {
-    home:    <span style="color:#7FA8D8;">screen</span>(HomePage),
-    search:  <span style="color:#7FA8D8;">screen</span>(SearchPage),
-    profile: <span style="color:#7FA8D8;">screen</span>(ProfilePage),
+    home:    <span style="color:#7FA8D8;">page</span>(HomePage,    { title: <span style="color:#8FB573;">'Home'</span> }),
+    search:  <span style="color:#7FA8D8;">page</span>(SearchPage,  { title: <span style="color:#8FB573;">'Search'</span> }),
+    profile: <span style="color:#7FA8D8;">page</span>(ProfilePage, { title: <span style="color:#8FB573;">'Profile'</span> }),
   },
 });
 
-<span style="color:#6B6557;">// mobile → React Navigation</span>
+<span style="color:#6B6557;">// mobile → React Navigation + Sublime AppBar</span>
 <span style="color:#6B6557;">// web    → react-router</span></pre>
       </div>
     </div>
@@ -201,19 +259,23 @@ const MARKUP = String.raw`
 
   <section style="padding:72px 4px 40px;">
     <div style="font-family:'IBM Plex Mono'; font-size:12px; font-weight:500; letter-spacing:0.14em; text-transform:uppercase; color:#A0561A; margin-bottom:14px;">The packages</div>
-    <h2 style="font-family:'Sora'; font-size:32px; font-weight:800; letter-spacing:-0.03em; color:#1E1B16; margin:0 0 36px; max-width:580px;">Five focused packages. One coherent system.</h2>
+    <h2 style="font-family:'Sora'; font-size:32px; font-weight:800; letter-spacing:-0.03em; color:#1E1B16; margin:0 0 36px; max-width:580px;">Focused packages. One coherent system.</h2>
     <div style="display:flex; flex-direction:column; gap:0; background:#fff; border-radius:20px; box-shadow:0 1px 2px rgba(20,28,48,0.04), 0 18px 48px -30px rgba(20,28,48,0.24); overflow:hidden;">
       <div style="display:grid; grid-template-columns:auto 1fr; gap:22px; align-items:center; padding:22px 28px; border-bottom:1px solid #F0EEE9;">
         <code style="font-family:'IBM Plex Mono'; font-size:14px; font-weight:600; color:#C76A08; background:#FBF4E6; padding:8px 14px; border-radius:10px; white-space:nowrap;">@sublime-ui/framework</code>
-        <span style="font-family:'Manrope'; font-size:15px; color:#5A5750;">Models, state, and the compile-time core that ties every platform together.</span>
+        <span style="font-family:'Manrope'; font-size:15px; color:#5A5750;">Models, gateways, state, and the compile-time core that ties every platform together.</span>
       </div>
       <div style="display:grid; grid-template-columns:auto 1fr; gap:22px; align-items:center; padding:22px 28px; border-bottom:1px solid #F0EEE9;">
         <code style="font-family:'IBM Plex Mono'; font-size:14px; font-weight:600; color:#C76A08; background:#FBF4E6; padding:8px 14px; border-radius:10px; white-space:nowrap;">@sublime-ui/library</code>
-        <span style="font-family:'Manrope'; font-size:15px; color:#5A5750;">Shared logic, hooks, and utilities — the platform-agnostic standard library.</span>
+        <span style="font-family:'Manrope'; font-size:15px; color:#5A5750;">The tokens-first design system — real MUI on web, React Native Paper on mobile.</span>
       </div>
       <div style="display:grid; grid-template-columns:auto 1fr; gap:22px; align-items:center; padding:22px 28px; border-bottom:1px solid #F0EEE9;">
         <code style="font-family:'IBM Plex Mono'; font-size:14px; font-weight:600; color:#C76A08; background:#FBF4E6; padding:8px 14px; border-radius:10px; white-space:nowrap;">@sublime-ui/ui</code>
-        <span style="font-family:'Manrope'; font-size:15px; color:#5A5750;">Building blocks that render to real MUI on web and Paper on mobile.</span>
+        <span style="font-family:'Manrope'; font-size:15px; color:#5A5750;">Cross-platform navigation (storybook → React Navigation / react-router) and layout primitives.</span>
+      </div>
+      <div style="display:grid; grid-template-columns:auto 1fr; gap:22px; align-items:center; padding:22px 28px; border-bottom:1px solid #F0EEE9;">
+        <code style="font-family:'IBM Plex Mono'; font-size:14px; font-weight:600; color:#C76A08; background:#FBF4E6; padding:8px 14px; border-radius:10px; white-space:nowrap;">@sublime-ui/storage</code>
+        <span style="font-family:'Manrope'; font-size:15px; color:#5A5750;">Local-first persistence — IndexedDB on web, SQLite on desktop &amp; mobile, behind one Gateway.</span>
       </div>
       <div style="display:grid; grid-template-columns:auto 1fr; gap:22px; align-items:center; padding:22px 28px; border-bottom:1px solid #F0EEE9;">
         <code style="font-family:'IBM Plex Mono'; font-size:14px; font-weight:600; color:#C76A08; background:#FBF4E6; padding:8px 14px; border-radius:10px; white-space:nowrap;">@sublime-ui/desktop</code>
@@ -255,14 +317,14 @@ const MARKUP = String.raw`
       <div style="display:flex; gap:64px; flex-wrap:wrap;">
         <div style="display:flex; flex-direction:column; gap:11px;">
           <div style="font-family:'Sora'; font-size:13px; font-weight:700; color:#1E1B16; margin-bottom:3px;">Product</div>
-          <a href="%DOCS%framework/overview" style="font-family:'Manrope'; font-size:14px; color:#6B675F;">Framework</a>
-          <a href="%DOCS%navigation/storybook" style="font-family:'Manrope'; font-size:14px; color:#6B675F;">Navigation</a>
-          <a href="%DOCS%desktop/overview" style="font-family:'Manrope'; font-size:14px; color:#6B675F;">Desktop</a>
+          <a href="%DOCS%core-concepts/models" style="font-family:'Manrope'; font-size:14px; color:#6B675F;">Framework</a>
+          <a href="%DOCS%core-concepts/navigation" style="font-family:'Manrope'; font-size:14px; color:#6B675F;">Navigation</a>
+          <a href="%DOCS%platforms/desktop/overview" style="font-family:'Manrope'; font-size:14px; color:#6B675F;">Desktop</a>
         </div>
         <div style="display:flex; flex-direction:column; gap:11px;">
           <div style="font-family:'Sora'; font-size:13px; font-weight:700; color:#1E1B16; margin-bottom:3px;">Resources</div>
           <a href="%DOCS%" style="font-family:'Manrope'; font-size:14px; color:#6B675F;">Docs</a>
-          <a href="%DOCS%devkit/overview" style="font-family:'Manrope'; font-size:14px; color:#6B675F;">CLI reference</a>
+          <a href="%DOCS%reference/cli" style="font-family:'Manrope'; font-size:14px; color:#6B675F;">CLI reference</a>
         </div>
         <div style="display:flex; flex-direction:column; gap:11px;">
           <div style="font-family:'Sora'; font-size:13px; font-weight:700; color:#1E1B16; margin-bottom:3px;">Community</div>
