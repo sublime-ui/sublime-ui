@@ -3,14 +3,14 @@ import { buildDoctorReport } from '../lib/doctor-report.js';
 import { log } from '../util/log.js';
 
 export async function doctorCommand(): Promise<number> {
-  log.step('Checking environment for offline Android builds…');
+  log.banner('Sublime · Environment doctor');
   const probes = await gatherProbes();
   const report = buildDoctorReport(probes);
   log.table(report.rows);
   if (report.ok) {
-    log.success('Environment ready. Run: sublime build');
+    log.success('Environment ready — run: sublime build');
     return 0;
   }
-  log.warn('Some requirements are missing. Run: sublime setup');
+  log.warn('Some requirements are missing — run: sublime setup');
   return 1;
 }
