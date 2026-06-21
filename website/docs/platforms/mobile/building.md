@@ -35,7 +35,7 @@ npm run dev:mobile       # sublime build --debug → debug build (needs Metro)
 
 The finished `.apk` (or `.aab` with `--aab`) is copied into **`dist/mobile/`** at your
 project root, alongside the other platforms' outputs — see
-[Where your builds go](../getting-started/commands.md#where-your-builds-go).
+[Where your builds go](/docs/reference/cli#where-your-builds-go).
 
 ## What "offline" means
 
@@ -55,7 +55,7 @@ distribute.
 > Missing SDK components (`ndk;…`, `cmake;…`) during a build are usually
 > auto-healed — the build parses the id, installs it, and retries. If it persists,
 > confirm `ANDROID_HOME` is set and writable. See
-> [Common Errors & Fixes](../troubleshooting.md).
+> [Common Errors & Fixes](/docs/reference/troubleshooting).
 
 ## `sublime run`
 
@@ -84,5 +84,5 @@ sublime run              # install + launch it on the device
 
 ## Next
 
-- [Theming on mobile](./theming.md) — how design tokens drive the Paper theme.
+- [Theming on mobile](/docs/core-concepts/theming) — how design tokens drive the Paper theme.
 - [Running on Mobile](./running.md) — `sublime doctor`, devices, emulators.

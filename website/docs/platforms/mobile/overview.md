@@ -12,7 +12,7 @@ second UI family: it has its own screens, its own navigation, and its own
 Paper-themed components, all driven from the same shared models and design tokens.
 
 Mobile and web are the two UI families a Sublime app ships; desktop reuses the web
-one. See [project structure](../framework/project-structure.md) for how shared core
+one. See [project structure](/docs/core-concepts/project-structure) for how shared core
 and per-platform screens sit together.
 
 ## Where mobile lives
@@ -89,11 +89,11 @@ a native book, or a dangling link fails the build with a clear message. Navigati
 is one typed hook everywhere: `nav.turnTo('product', { id: 1 })`.
 
 The same hook, the same `<Card>`, the same model — a different, native screen.
-Read more in [Storybook Navigation](../navigation/storybook.md).
+Read more in [Storybook Navigation](/docs/core-concepts/navigation).
 
 ## Next
 
 - [Running the mobile app](./running.md) — `sublime doctor`, `dev:mobile`, and
   devices.
 - [Building for Android](./building.md) — the offline APK / AAB build.
-- [Theming on mobile](./theming.md) — how tokens drive the Paper theme.
+- [Theming on mobile](/docs/core-concepts/theming) — how tokens drive the Paper theme.

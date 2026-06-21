@@ -1,9 +1,9 @@
 ---
-sidebar_position: 1
-title: Learning Path
+sidebar_position: 0
+title: Getting Started
 ---
 
-# Learning Path
+# Getting Started
 
 Sublime is one TypeScript codebase that spans **mobile, web, and desktop** — real platform-native UI (MUI on web, React Native Paper on mobile), a Laravel/Eloquent-inspired Model layer on the frontend, and navigation plus a native bridge that are generated and type-checked at compile time.
 
@@ -22,7 +22,7 @@ A Sublime app is **one workspace** with a clear split:
 - **Shared core** — `components/`, `models/`, `theme/`, and native service contracts. Written once, used everywhere.
 - **Per-platform screens** — `screens/web/` and `screens/mobile/`, plus each platform's navigation. Desktop reuses the **web** UI; there are no separate desktop screens.
 
-Start with the [Framework Overview](/docs/framework/overview) and [Your First App](/docs/getting-started/your-first-app) to see the layout end to end.
+Start with the [Framework Overview](/docs/core-concepts/models) and [Your First App](/docs/getting-started/your-first-app) to see the layout end to end.
 
 ### Skills you'll learn
 
@@ -47,7 +47,7 @@ Start with the [Framework Overview](/docs/framework/overview) and [Your First Ap
 
 **Concepts & APIs:** `Model`, `registerModel`, `declare` fields, `resource`, `all()` / `find()` / `rxAll()` / `rxFind()`, `ApiError`, `SublimeTokens`, `<SublimeProvider>`, `useTokens()`, `useNotify()`.
 
-**Docs:** [Framework Overview](/docs/framework/overview) · [Library Overview](/docs/library/overview) · [Your First App](/docs/getting-started/your-first-app)
+**Docs:** [Framework Overview](/docs/core-concepts/models) · [Library Overview](/docs/core-concepts/components) · [Your First App](/docs/getting-started/your-first-app)
 
 **By the end** you can scaffold a workspace, define models, read live data into themed, native-looking screens, and surface notifications.
 
@@ -84,7 +84,7 @@ Start with the [Framework Overview](/docs/framework/overview) and [Your First Ap
 
 **Concepts & APIs:** `book` / `page` / `link`, mobile vs web formats, `page<Params>` and typed `turnTo`, `link` for nesting books, `sublime build:nav`, `useNav()` (`turnTo` / `turnBack` / `current` / `params`), `Screen` / `Stack` / `Row` / `Spacer`, `save()` / `delete()`, `Model.call(...)`.
 
-**Docs:** [Storybook Navigation](/docs/navigation/storybook) · [Framework Overview](/docs/framework/overview) · [Library Overview](/docs/library/overview)
+**Docs:** [Navigation](/docs/core-concepts/navigation) · [Models](/docs/core-concepts/models) · [Components & theming](/docs/core-concepts/components)
 
 **By the end** you can ship a real multi-screen app on web and mobile from one shared core — navigable, laid out, and reading and writing data through your models.
 
@@ -117,10 +117,10 @@ Start with the [Framework Overview](/docs/framework/overview) and [Your First Ap
 
 **Concepts & APIs:** `defineNative`, `registerNative`, `useNative<T>`, the `native:invoke` channel, `contextIsolation` / `nodeIntegration` hardening, `NativeError`, built-in services (`fs` / `dialog` / `shell` / `clipboard` / `notifications`), `sublime desktop:dev` / `desktop:build`, `sublime build` / `run`.
 
-**Docs:** [Native Bridge](/docs/desktop/native-bridge) · [Desktop Overview](/docs/desktop/overview) · [Desktop Packaging](/docs/desktop/packaging)
+**Docs:** [Native calls](/docs/core-concepts/native-calls) · [Desktop](/docs/platforms/desktop/overview) · [Packaging](/docs/platforms/desktop/packaging)
 
-### Where it's heading
+### Data, your way
 
-The Gateway is API-only today (REST), with responses shaped as `ApiResponse<T> = { success, message, data, errors }`. A **storage-agnostic DB Gateway** is on the roadmap — the same Model API you already write, backed by either REST or a local database, without changing your screens.
+Models talk to a swappable **Gateway**: `HttpGateway` for a REST API (responses shaped `ApiResponse<T> = { success, message, data, errors }`) or `DbGateway` for a local database — IndexedDB on web, SQLite on desktop and mobile — with the **same Model API either way**, no screen changes. See [Data & persistence](/docs/core-concepts/data-and-persistence).
 
 **By the end** you can call native hardware safely from a shared codebase, ship a packaged desktop app, produce offline Android builds, and reason about where Sublime is going next.

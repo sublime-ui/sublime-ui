@@ -25,13 +25,13 @@ theme and talks to the same models.
 These concept pages give you the mental model for each piece of the shared core.
 Each one links down to the deep docs for full detail:
 
-- **[Models](/docs/framework/overview)** — declare your data once and read/write
+- **[Models](/docs/core-concepts/models)** — declare your data once and read/write
   it reactively from any platform.
-- **[Storybook (navigation)](/docs/navigation/storybook)** — define your app's
+- **[Storybook (navigation)](/docs/core-concepts/navigation)** — define your app's
   navigation structure in one shared place.
-- **[Native calls](/docs/desktop/native-bridge)** — a typed contract for calling
+- **[Native calls](/docs/core-concepts/native-calls)** — a typed contract for calling
   OS and Node capabilities.
-- **[Theming](/docs/mobile/theming)** — shared design tokens that both UI layers
+- **[Theming](/docs/core-concepts/theming)** — shared design tokens that both UI layers
   consume.
 - **[Components](/components/overview)** — the cross-platform component library your
   screens are built from.
@@ -40,4 +40,4 @@ A **Services** concept (your custom business logic) is also part of the shared
 core — that page is coming soon.
 
 For the concrete folder layout that holds all of this, see
-[project structure](/docs/framework/project-structure).
+[project structure](/docs/core-concepts/project-structure).

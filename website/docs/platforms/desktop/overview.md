@@ -12,7 +12,7 @@ navigation the browser uses. Desktop adds reach, not a third design.
 
 Two capabilities make up the desktop target:
 
-- **[Native bridge](./native-bridge.md)** — call Node/OS from your app through a
+- **[Native bridge](/docs/core-concepts/native-calls)** — call Node/OS from your app through a
   single, secure, typed channel, and define your own native modules.
 - **[Packaging](./packaging.md)** — `sublime desktop:dev` and
   `sublime desktop:build`, powered by Electron Forge.
@@ -32,5 +32,5 @@ web). Calls travel over one generic IPC channel to the main process, which
 dispatches to a registered service. Adding a capability never touches the preload
 or the bridge — you just register one more service.
 
-See [project structure](../framework/project-structure.md) for how the `desktop/` shell sits
+See [project structure](/docs/core-concepts/project-structure) for how the `desktop/` shell sits
 alongside your shared `src/`.

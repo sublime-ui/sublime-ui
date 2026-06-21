@@ -1,26 +1,43 @@
 ---
-sidebar_position: 1
-title: Storybook Navigation
+sidebar_position: 5
+title: Navigation
 ---
 
-# Storybook Navigation
+# Navigation
 
-Sublime UI describes navigation as a **storybook**, then compiles it — ahead of
-time — into the idiomatic router for each platform: React Navigation on mobile,
-react-router on web. You never hand-write platform routing.
+In Sublime UI you don't hand-write router code. You describe your navigation as a
+typed **storybook** — one per platform — and a build step compiles it, ahead of
+time, into the idiomatic router each platform expects: react-router on web, React
+Navigation on mobile. You never hand-write platform routing.
 
-## The model
+## The mental model
+
+A storybook is a plain, typed description of your screens and how they connect:
 
 - A **Book** is a navigator. It has a **print format** that decides how its pages
   are presented.
 - A **Page** is a screen. One page follows another.
 - A book can **link** to another book — a nested navigator.
 
-Books are authored **separately per platform**, because mobile and web navigation
-are genuinely different shapes. The mobile book references mobile screens and
-mobile formats; the web book references web screens and web formats.
+You author this in `storybook.web.ts` and `storybook.native.ts`, kept **separate
+per platform** because web and mobile navigation are genuinely different shapes —
+different screens, different presentation formats. The mobile book references
+mobile screens and mobile formats; the web book references web screens and web
+formats.
 
-### Print formats
+The important part: **you author the storybook; the navigation code is generated.**
+The `sublime build:nav` step reads each storybook ahead of time and emits idiomatic
+routers — react-router on web, React Navigation on mobile — plus a fully typed route
+map. Your app just mounts the platform-resolved `<Navigation>` and moves between
+pages with one typed `useNav()` hook.
+
+Because the route map is generated from the same source, navigation is checked at
+the type level: an unknown page name is a compile error, and screen params are
+required exactly when a page declares them. Treat the compiled
+`navigation.*.tsx` / `routes.d.ts` files as build artifacts — edit the storybook,
+not the output.
+
+## Print formats
 
 Formats are a validated string union per platform — an invalid value is a type
 error.
@@ -52,7 +69,7 @@ export default book({
 The web book has the same shape, pointing at `../screens/web/*` with a web format
 such as `sidebar`.
 
-## Navigating
+## Typed routes and navigating
 
 One typed hook, everywhere:
 
@@ -82,7 +99,7 @@ message.
 ## Mobile header (AppBar)
 
 On mobile, every generated navigator uses the shipped Sublime
-[`AppBar`](../../components/bars-nav/AppBar) as its header — **not** React
+[`AppBar`](/components/bars-nav/AppBar) as its header — **not** React
 Navigation's default header. You get it for free; there is nothing to wire up.
 
 - The header **title** comes from each page's `title` option.

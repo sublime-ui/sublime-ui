@@ -24,7 +24,7 @@ Electron Forge **makers** generate the installers:
 
 The installers are copied into **`dist/desktop/`** at your project root, alongside the
 other platforms' outputs (`dist/web`, `dist/mobile`) — see
-[Where your builds go](../getting-started/commands.md#where-your-builds-go).
+[Where your builds go](/docs/reference/cli#where-your-builds-go).
 
 Two Forge plugins harden and complete the build:
 

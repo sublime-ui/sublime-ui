@@ -8,7 +8,7 @@ title: Running on Mobile
 The mobile dev loop is `sublime doctor` once, then `npm run dev:mobile` to build
 and launch on a device or emulator. This page is the mobile-specific flow; for the
 full three-target picture and toolchain table, see
-[Running your app](../getting-started/running.md).
+[Running your app](/docs/getting-started/running).
 
 ## Step 1 — Check the toolchain with `sublime doctor`
 
@@ -68,5 +68,5 @@ one is attached.
 ## Next
 
 - [Building for Android](./building.md) — the offline release APK and AAB.
-- [Common Errors & Fixes](../troubleshooting.md) — JDK 17, SDK components, and
+- [Common Errors & Fixes](/docs/reference/troubleshooting) — JDK 17, SDK components, and
   peer-dependency install issues.

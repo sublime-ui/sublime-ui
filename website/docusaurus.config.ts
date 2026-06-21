@@ -35,6 +35,40 @@ const config: Config = {
         editUrl: 'https://github.com/sublime-ui/sublime-ui/tree/main/website/',
       },
     ],
+    // Preserve old URLs after the 2026-06 docs restructure (Diátaxis: Getting
+    // Started → Core Concepts → Platforms → Guides → Reference). Maps every
+    // retired path to its canonical home so bookmarks/links keep working.
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          { from: '/docs/framework/overview', to: '/docs/core-concepts/models' },
+          { from: '/docs/framework/models', to: '/docs/core-concepts/models' },
+          { from: '/docs/framework/project-structure', to: '/docs/core-concepts/project-structure' },
+          { from: '/docs/library/overview', to: '/docs/core-concepts/components' },
+          { from: '/docs/navigation/storybook', to: '/docs/core-concepts/navigation' },
+          { from: '/docs/core-concepts/storybook', to: '/docs/core-concepts/navigation' },
+          { from: '/docs/devkit/overview', to: '/docs/reference/cli' },
+          { from: '/docs/getting-started/commands', to: '/docs/reference/cli' },
+          { from: '/docs/troubleshooting', to: '/docs/reference/troubleshooting' },
+          { from: '/docs/learning-path', to: '/docs/getting-started' },
+          { from: '/docs/cookbook', to: '/docs/guides' },
+          { from: '/docs/cookbook/coming-from-web', to: '/docs/guides/coming-from-web' },
+          { from: '/docs/cookbook/coming-from-react-native', to: '/docs/guides/coming-from-react-native' },
+          { from: '/docs/cookbook/coming-from-flutter', to: '/docs/guides/coming-from-flutter' },
+          { from: '/docs/web/overview', to: '/docs/platforms/web/overview' },
+          { from: '/docs/web/routing', to: '/docs/platforms/web/routing' },
+          { from: '/docs/web/styling', to: '/docs/core-concepts/theming' },
+          { from: '/docs/mobile/overview', to: '/docs/platforms/mobile/overview' },
+          { from: '/docs/mobile/running', to: '/docs/platforms/mobile/running' },
+          { from: '/docs/mobile/building', to: '/docs/platforms/mobile/building' },
+          { from: '/docs/mobile/theming', to: '/docs/core-concepts/theming' },
+          { from: '/docs/desktop/overview', to: '/docs/platforms/desktop/overview' },
+          { from: '/docs/desktop/packaging', to: '/docs/platforms/desktop/packaging' },
+          { from: '/docs/desktop/native-bridge', to: '/docs/core-concepts/native-calls' },
+        ],
+      },
+    ],
   ],
 
   presets: [
@@ -76,9 +110,9 @@ const config: Config = {
           title: 'Docs',
           items: [
             { label: 'Introduction', to: '/docs/' },
-            { label: 'Framework', to: '/docs/framework/overview' },
-            { label: 'Navigation', to: '/docs/navigation/storybook' },
-            { label: 'Desktop', to: '/docs/desktop/overview' },
+            { label: 'Getting Started', to: '/docs/getting-started' },
+            { label: 'Core Concepts', to: '/docs/core-concepts/overview' },
+            { label: 'Reference', to: '/docs/reference/cli' },
           ],
         },
         {

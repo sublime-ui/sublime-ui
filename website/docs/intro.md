@@ -22,8 +22,11 @@ screens are React + MUI, and desktop packages the web UI inside Electron. Only t
 | `@sublime-ui/framework` | Model-centric data layer (Laravel-style models over Redux Toolkit + a pluggable Gateway). |
 | `@sublime-ui/library` | A tokens-first design system: themeable, cross-platform components. |
 | `@sublime-ui/ui` | Navigation ("storybooks") + layout primitives (`Screen`, `Stack`, `Row`, `Spacer`). |
+| `@sublime-ui/storage` | Local-first persistence: IndexedDB on web, SQLite on desktop & mobile, behind one Gateway. |
 | `@sublime-ui/desktop` | Electron shell + a typed native bridge for calling Node/OS from your app. |
 | `@sublime-ui/devkit` | The `sublime` CLI: scaffolding, code generators, builds, and packaging. |
+
+See the [packages reference](/docs/reference/packages) for the full list.
 
 ## What makes it different
 

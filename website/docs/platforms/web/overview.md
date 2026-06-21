@@ -13,7 +13,7 @@ inside its Electron shell.
 
 Three pieces make up the web target:
 
-- **[Styling](./styling.md)** — your design tokens drive the MUI theme; you edit
+- **[Styling](/docs/core-concepts/theming)** — your design tokens drive the MUI theme; you edit
   tokens, not per-platform style code.
 - **[Routing](./routing.md)** — `storybook.web.ts` compiles to a react-router
   `navigation.tsx`, navigated with a typed `useNav`.
@@ -28,7 +28,7 @@ dev server with hot module replacement and a small, optimized production bundle.
 At the top of the tree, `<SublimeProvider tokens={tokens}>` turns your tokens
 into a real MUI theme, so every `@sublime-ui/library` component renders as actual
 Material UI. Inside it, the generated `<Navigation>` (react-router) mounts your
-web screens. See [Styling](./styling.md) for how tokens become the theme.
+web screens. See [Styling](/docs/core-concepts/theming) for how tokens become the theme.
 
 ## Where web screens live
 
@@ -55,7 +55,7 @@ You never hand-write react-router. You author `storybook.web.ts` — a declarati
 `tabs`) — and `sublime build:nav` compiles it ahead of time into the idiomatic
 `navigation.tsx`. Re-run `build:nav` whenever you change a storybook so the
 generated navigation stays in sync. See [Routing](./routing.md) for the full
-flow, and the [Storybook Navigation](../navigation/storybook.md) docs for the
+flow, and the [Storybook Navigation](/docs/core-concepts/navigation) docs for the
 shared model across platforms.
 
 ## Develop and build
@@ -68,4 +68,4 @@ npm run build:web   # production bundle
 `dev:web` serves your app with hot module replacement — edits to web screens
 reload live. `build:web` produces the static, deployable bundle. For the full
 per-target dev loop and CLI details, see
-[Running Your App](../getting-started/running.md).
+[Running Your App](/docs/getting-started/running).

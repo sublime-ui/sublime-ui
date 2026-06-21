@@ -62,6 +62,6 @@ time, not at runtime.
 This page covers routing as it applies to the web target. The storybook model —
 books, pages, links, print formats, and how the same source compiles to React
 Navigation on mobile — is covered in depth in
-[Storybook Navigation](../navigation/storybook.md). For the per-target dev loop
+[Storybook Navigation](/docs/core-concepts/navigation). For the per-target dev loop
 and when to re-run `build:nav`, see
-[Running Your App](../getting-started/running.md).
+[Running Your App](/docs/getting-started/running).

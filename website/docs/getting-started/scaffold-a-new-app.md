@@ -126,4 +126,4 @@ routes.
 
 - [Your First App](./your-first-app) — build the same app by hand to understand
   each layer.
-- [The Learning Path](../learning-path) — basics to advanced.
+- [The Learning Path](/docs/getting-started) — basics to advanced.

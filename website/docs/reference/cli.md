@@ -1,12 +1,16 @@
 ---
-sidebar_position: 5
-title: Commands Cheatsheet
+sidebar_position: 1
+title: CLI
 ---
 
-# Commands Cheatsheet
+# CLI (`sublime`)
 
-Every command you'll use building a Sublime app — the ones you run every day up
-top, then the full catalog.
+`@sublime-ui/devkit` is the `sublime` command line. It scaffolds code, generates
+the cross-platform artifacts, and drives builds for every target (web, desktop,
+mobile).
+
+Installed by `@sublime-ui/devkit` (bin `sublime`, alias `sui`). Run any command
+with `npx sublime <command>` or `npx @sublime-ui/devkit <command>`.
 
 ## A day in the life
 
@@ -172,7 +176,7 @@ Only the scripts for the targets you selected are present.
 All three targets follow the same shape: **`dev:<target>`** to run,
 **`build:<target>`** to package.
 
-### Where your builds go
+## Where your builds go
 
 Every `build:*` command writes its final artifact into a single **`dist/`** folder
 at the project root — one subfolder per platform, so all your release outputs live
@@ -189,10 +193,7 @@ along the way (`desktop/out`, `desktop/.webpack`, `android/`) — those stay in 
 but the finished artifacts are copied into `dist/` for you, so you only ever need to
 look in one folder.
 
-## The `sublime` CLI
-
-Installed by `@sublime-ui/devkit` (bin `sublime`, alias `sui`). Run any command
-with `npx sublime <command>` or `npx @sublime-ui/devkit <command>`.
+## Command reference
 
 ### Scaffolding & code generation
 
@@ -214,7 +215,7 @@ with `npx sublime <command>` or `npx @sublime-ui/devkit <command>`.
 | Command | What it does |
 | --- | --- |
 | `sublime desktop:dev [--project <path>]` | Run the Electron shell in development (Forge start + HMR). |
-| `sublime desktop:build [--project <path>]` | Build desktop installers (Forge make). |
+| `sublime desktop:build [--project <path>]` | Build desktop installers (Forge make) → `dist/desktop/`. |
 
 ### Mobile (offline Android)
 
@@ -222,12 +223,13 @@ with `npx sublime <command>` or `npx @sublime-ui/devkit <command>`.
 | --- | --- |
 | `sublime doctor` | Check the Android toolchain (Node, JDK 17, SDK, NDK, CMake) — a ✓/✗ table. |
 | `sublime setup` | Install missing pieces (Windows: a portable JDK 17; macOS/Linux: guided steps). |
-| `sublime build [--release\|--debug] [--aab] [--project <path>]` | Build a standalone Android APK fully offline. `--release` (default) embeds the JS bundle; `--debug` needs Metro; `--aab` makes a Play Store bundle. |
+| `sublime build [--release\|--debug] [--aab] [--project <path>]` | Build a standalone Android APK fully offline → `dist/mobile/`. `--release` (default) embeds the JS bundle; `--debug` needs Metro; `--aab` makes a Play Store bundle. |
 | `sublime run [--device <id>] [--project <path>]` | Install and launch the built APK on a device/emulator. |
 
 ## See also
 
-- [Scaffold a New App](./scaffold-a-new-app) — the full first-app walkthrough.
-- [Running your app](./running) — per-platform run details.
-- [Devkit reference](../devkit/overview) — the CLI in depth.
-- [Common Errors & Fixes](../troubleshooting) — when a command misbehaves.
+- [Scaffold a New App](/docs/getting-started/scaffold-a-new-app) — the full first-app walkthrough.
+- [Running your app](/docs/getting-started/running) — per-platform run details.
+- [Common Errors & Fixes](/docs/reference/troubleshooting) — when a command misbehaves.
+- [Building for mobile](/docs/platforms/mobile/building) — offline Android builds in depth.
+- [Packaging the desktop app](/docs/platforms/desktop/packaging) — Electron Forge installers in depth.

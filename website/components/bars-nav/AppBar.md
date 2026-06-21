@@ -13,7 +13,7 @@ On mobile this is also the **default navigation header**: `sublime build:nav`
 wires it into every generated navigator automatically (title from the page's
 `title`, back arrow shown only when there's somewhere to go back). You rarely
 construct it by hand for navigation — see
-[Storybook Navigation → Mobile header](/docs/navigation/storybook#mobile-header-appbar).
+[Storybook Navigation → Mobile header](/docs/core-concepts/navigation#mobile-header-appbar).
 Use it directly when you need a standalone bar or a custom header (`header: false`).
 
 ## Usage
