@@ -1,5 +1,12 @@
 # @sublime-ui/storage
 
+## 4.0.0
+
+### Patch Changes
+
+- @sublime-ui/framework@4.0.0
+- @sublime-ui/desktop@4.0.0
+
 ## 3.0.0
 
 ### Patch Changes
