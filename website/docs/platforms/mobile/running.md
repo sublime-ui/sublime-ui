@@ -43,10 +43,10 @@ on the device — the normal React Native development experience.
 This uses your `src/screens/mobile/*.native.tsx` screens behind the React
 Navigation tree compiled from `storybook.native.ts`.
 
-> Editing navigation? Re-run `npm run build:nav` (or keep
-> `npx sublime build:nav --watch` running) so the generated
-> `navigation.native.tsx` and route types stay in sync. A running app uses the
-> **compiled** navigation, not your storybook directly.
+> Editing navigation? `sublime build` (and `dev:mobile`) recompile it before each
+> build, so a normal rebuild picks up storybook changes. While iterating, you can
+> also keep `npx sublime build:nav --watch` running. A running app uses the
+> **compiled** `navigation.native.tsx`, not your storybook directly.
 
 ## Devices and emulators
 

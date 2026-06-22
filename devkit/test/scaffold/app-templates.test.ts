@@ -13,10 +13,11 @@ describe('app templates', () => {
     expect(pkg.dependencies['@sublime-ui/desktop']).toMatch(/^\^/);
     // react-redux ships on every target — Model.rxAll/rxFind use useSelector.
     expect(pkg.dependencies['react-redux']).toMatch(/^\^/);
-    expect(pkg.scripts['dev:web']).toContain('vite');
+    expect(pkg.scripts['dev:web']).toBe('sublime dev:web');
+    expect(pkg.scripts['build:web']).toBe('sublime build:nav && vite build');
     expect(pkg.scripts['build:nav']).toBe('sublime build:nav');
-    expect(pkg.scripts['dev:desktop']).toBe('sublime desktop:dev');
-    expect(pkg.scripts['build:desktop']).toBe('sublime desktop:build');
+    expect(pkg.scripts['dev:desktop']).toBe('sublime dev:desktop');
+    expect(pkg.scripts['build:desktop']).toBe('sublime build:desktop');
   });
   it('package.json points Expo main at the mobile entry only with mobile', () => {
     const withMobile = JSON.parse(renderAppPackageJson('my-app', ['web', 'mobile']));

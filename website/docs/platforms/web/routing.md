@@ -38,10 +38,10 @@ sublime build:nav
 ```
 
 `build:nav` emits `navigation.tsx` (the react-router navigator) and a typed route
-map. The web app mounts the generated `<Navigation>`. Re-run `build:nav` after
-**any** navigation change — the compiled file is generated, so you edit the
-storybook, not `navigation.tsx`. Validation runs at compile time, so a duplicate
-page key or a dangling link fails the build with a clear message.
+map. The web app mounts the generated `<Navigation>`. You edit the storybook, not
+`navigation.tsx` — and `dev:web` recompiles on every change, so you don't run
+`build:nav` by hand during development. Validation runs at compile time, so a
+duplicate page key or a dangling link fails the build with a clear message.
 
 ## Typed `useNav`
 

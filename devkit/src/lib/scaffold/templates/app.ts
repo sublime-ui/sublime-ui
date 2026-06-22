@@ -29,8 +29,11 @@ export function renderAppPackageJson(name: string, targets: Target[]): string {
     devDeps['@types/react-dom'] = '^18.3.1';
     devDeps['vite'] = PEER_VERSIONS['vite']!;
     devDeps['@vitejs/plugin-react'] = PEER_VERSIONS['@vitejs/plugin-react']!;
-    scripts['dev:web'] = 'vite';
-    scripts['build:web'] = 'vite build';
+    // The navigation layer is generated and gitignored, so a clean checkout has
+    // only the storybook sources. `dev:web` compiles it and keeps watching the
+    // storybooks (recompiling on change); `build:web` compiles it once up front.
+    scripts['dev:web'] = 'sublime dev:web';
+    scripts['build:web'] = 'sublime build:nav && vite build';
   }
   if (has(targets, 'mobile')) {
     // `sublime build` runs `expo prebuild`; pin expo to the RN-compatible SDK so
@@ -48,8 +51,8 @@ export function renderAppPackageJson(name: string, targets: Target[]): string {
   if (has(targets, 'desktop')) {
     deps['@sublime-ui/desktop'] = SUBLIME_VERSIONS.desktop;
     devDeps['electron'] = PEER_VERSIONS['electron']!;
-    scripts['dev:desktop'] = 'sublime desktop:dev';
-    scripts['build:desktop'] = 'sublime desktop:build';
+    scripts['dev:desktop'] = 'sublime dev:desktop';
+    scripts['build:desktop'] = 'sublime build:desktop';
   }
 
   const pkg: Record<string, unknown> = {

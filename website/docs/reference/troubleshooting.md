@@ -93,13 +93,40 @@ diagnostics name the rule:
 **Why:** navigation is **compiled ahead of time** — the running app uses the
 generated `navigation.tsx` / `navigation.native.tsx`, not your storybook directly.
 
-**Fix:** re-run the compiler after editing a storybook:
+**Fix:** the dev servers already recompile navigation on every storybook change —
+just keep `npm run dev:web` or `npm run dev:desktop` running. If you're compiling
+manually (e.g. a custom script), re-run after editing a storybook:
 
 ```bash
 npm run build:nav        # or: npx @sublime-ui/devkit build:nav --watch
 ```
 
 The `--watch` flag rebuilds automatically on save.
+
+### `Unable to resolve module ./navigation.js from src/navigation/index.ts`
+
+```text
+None of these files exist:
+  * src/navigation/navigation.js(.native.tsx|.tsx|…)
+> 2 | export { Navigation } from './navigation.js';
+```
+
+**Why:** the four navigation files (`navigation.native.tsx`, `navigation.tsx`,
+`routes.d.ts`, `index.ts`) are **generated, git-ignored build artifacts**. On a
+fresh clone, CI checkout, or a copy that didn't carry ignored files, only your
+storybooks are present — so the barrel points at files that haven't been generated
+yet.
+
+**Fix:** generate them. The dev servers and builds do this automatically
+(`dev:web`, `dev:desktop`, `sublime build`, `build:web`, `build:desktop`), so on a
+fresh checkout just run your normal command. To generate them directly:
+
+```bash
+npm run build:nav
+```
+
+This is fixed in current `@sublime-ui/devkit`, where `sublime build` always
+compiles navigation first — upgrade if an older build skipped the step.
 
 ### `link()` to a book in another file isn't resolved
 
@@ -155,6 +182,18 @@ mobile, `useNative` returns `null` by design so the same screen runs everywhere.
 **Fix:** guard the call — `const greeter = useNative<…>('greeter'); greeter?.hello()`.
 If it's `null` *on desktop too*, confirm the service is registered in the main
 process via `registerNative([...])`.
+
+### `build:desktop` hangs while packing the installer
+
+**Why:** the Windows **Squirrel** installer maker (`MakerSquirrel`) is slow and can
+appear to hang on large or unsigned apps while it packs the `.exe`.
+
+**Fix:** the default makers no longer include Squirrel — `build:desktop` produces a
+portable `.zip` on Windows/macOS (and `.deb`/`.rpm` on Linux), which builds fast
+and never hangs. If you scaffolded earlier and still have `MakerSquirrel` in
+`desktop/forge.config.ts`, remove it (or keep it knowing the pack step takes
+several minutes). To intentionally ship a Windows installer, see
+[Packaging → Want a Windows installer?](/docs/platforms/desktop/packaging#want-a-windows-installer).
 
 ### Renderer build fails importing `@sublime-ui/desktop`
 

@@ -112,10 +112,10 @@ Start with the [Framework Overview](/docs/core-concepts/models) and [Your First 
 
 - **Register and consume it.** Register services in the Electron main process with `registerNative([fs, dialog, shell, clipboard, notifications, printer])`, then call from any renderer screen with `useNative<Printer>('printer')` — which is `null` on plain web, so you guard with `printer?.print(receipt)`.
 - **Understand the security model.** Everything flows over one generic IPC channel (`native:invoke`). The renderer imports only the `import type` of a service, so node deps never enter the web bundle. The shell runs with `contextIsolation: true` and `nodeIntegration: false`, and the main router rejects any `(module, method)` pair that wasn't registered; failures surface as a typed `NativeError`. Built-in services include `fs`, `dialog`, `shell`, `clipboard`, and `notifications`.
-- **Package for desktop with Electron Forge.** Run `sublime desktop:dev` for Forge start with HMR, and `sublime desktop:build` to make Windows/macOS/Linux installers. Desktop renders the **web** UI — no separate desktop screens.
+- **Package for desktop with Electron Forge.** Run `sublime dev:desktop` for Forge start with HMR, and `sublime build:desktop` to make Windows/macOS/Linux packages. Desktop renders the **web** UI — no separate desktop screens.
 - **Build offline for Android.** Use `sublime build` for an offline Android APK and `sublime run` to install and launch on a connected device.
 
-**Concepts & APIs:** `defineNative`, `registerNative`, `useNative<T>`, the `native:invoke` channel, `contextIsolation` / `nodeIntegration` hardening, `NativeError`, built-in services (`fs` / `dialog` / `shell` / `clipboard` / `notifications`), `sublime desktop:dev` / `desktop:build`, `sublime build` / `run`.
+**Concepts & APIs:** `defineNative`, `registerNative`, `useNative<T>`, the `native:invoke` channel, `contextIsolation` / `nodeIntegration` hardening, `NativeError`, built-in services (`fs` / `dialog` / `shell` / `clipboard` / `notifications`), `sublime dev:desktop` / `build:desktop`, `sublime build` / `run`.
 
 **Docs:** [Native calls](/docs/core-concepts/native-calls) · [Desktop](/docs/platforms/desktop/overview) · [Packaging](/docs/platforms/desktop/packaging)
 

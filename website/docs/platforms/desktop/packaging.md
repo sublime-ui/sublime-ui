@@ -8,23 +8,50 @@ title: Packaging
 Desktop packaging is driven by the `sublime` CLI and powered by **Electron Forge**.
 
 ```bash
-sublime desktop:dev     # Forge start — Webpack dev server + HMR, loads the preload
-sublime desktop:build   # Forge make — produces platform installers
+sublime dev:desktop     # Forge start — Webpack dev server + HMR + live navigation recompile
+sublime build:desktop   # Forge make — produces platform packages
 ```
 
-## What `desktop:build` produces
+`dev:desktop` compiles the navigation layer on startup and keeps watching the
+storybooks, recompiling on every change (the generated nav files are git-ignored).
+Both commands keep their old names — `desktop:dev` / `desktop:build` — as aliases.
 
-Electron Forge **makers** generate the installers:
+## What `build:desktop` produces
+
+Electron Forge **makers** generate the packages. The default makers favour a fast,
+reliable build on every OS:
 
 | Platform | Maker | Output |
 | --- | --- | --- |
-| Windows | `MakerSquirrel` | `.exe` installer |
+| Windows | `MakerZIP` | `.zip` (portable, unzip-and-run) |
 | macOS | `MakerZIP` | `.zip` |
 | Linux | `MakerDeb`, `MakerRpm` | `.deb`, `.rpm` |
 
-The installers are copied into **`dist/desktop/`** at your project root, alongside the
+The packages are copied into **`dist/desktop/`** at your project root, alongside the
 other platforms' outputs (`dist/web`, `dist/mobile`) — see
 [Where your builds go](/docs/reference/cli#where-your-builds-go).
+
+### Want a Windows installer?
+
+ZIP is the default on Windows because the Squirrel installer maker is slow and can
+appear to **hang** on large or unsigned apps. To ship a Windows auto-update
+installer, opt in: install the maker and add it to `desktop/forge.config.ts`
+(the file ships with commented instructions):
+
+```bash
+npm i -D @electron-forge/maker-squirrel
+```
+
+```ts
+import { MakerSquirrel } from '@electron-forge/maker-squirrel';
+// …
+makers: [
+  new MakerSquirrel({}),   // .exe installer (expect a multi-minute pack step)
+  new MakerZIP({}),
+  new MakerRpm({}),
+  new MakerDeb({}),
+],
+```
 
 Two Forge plugins harden and complete the build:
 

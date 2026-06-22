@@ -12,10 +12,17 @@ environment and platform toolchains.
 ## Web
 
 The web target runs your `screens/web/` screens with the MUI theme generated from
-your tokens, behind the `navigation.tsx` (react-router) output of
-`build:nav`. Develop it with your project's standard web dev server from the
-`web/` entry — re-run `sublime build:nav` whenever you change a storybook so the
-generated navigation stays in sync.
+your tokens, behind the `navigation.tsx` (react-router) output of `build:nav`.
+Develop it with:
+
+```bash
+npm run dev:web        # → sublime dev:web
+```
+
+`sublime dev:web` compiles the navigation, starts the Vite dev server, and keeps
+**watching the storybooks** — so any navigation change recompiles automatically
+while the server runs. (The generated nav files are git-ignored build artifacts;
+you no longer run `build:nav` by hand during development.)
 
 ## Mobile
 
@@ -45,20 +52,23 @@ screens.
 Start the desktop app in development, with Forge and HMR:
 
 ```bash
-npx @sublime-ui/devkit desktop:dev
+npx @sublime-ui/devkit dev:desktop
 ```
 
-`sublime desktop:dev` runs Forge start with hot module replacement, so edits to
-your web screens reload live in the desktop window.
+`sublime dev:desktop` runs Forge start with hot module replacement, so edits to
+your web screens reload live in the desktop window. Like `dev:web`, it also
+recompiles navigation whenever a storybook changes. (Still aliased as
+`desktop:dev`.)
 
-Package installers for distribution:
+Package the app for distribution:
 
 ```bash
-npx @sublime-ui/devkit desktop:build
+npx @sublime-ui/devkit build:desktop
 ```
 
-`sublime desktop:build` runs Forge make to produce Windows, macOS, and Linux
-installers.
+`sublime build:desktop` runs Forge make to produce Windows, macOS, and Linux
+packages (a portable `.zip` on Windows/macOS, `.deb`/`.rpm` on Linux). To add a
+Windows installer, see [Packaging](/docs/platforms/desktop/packaging#want-a-windows-installer).
 
 ### Calling native code
 
@@ -81,9 +91,10 @@ never leak into the web bundle. Built-in services include `fs`, `dialog`,
 
 | Platform | Develop | Build / Package |
 | --- | --- | --- |
-| Web | Web dev server (`web/` entry) | Your web bundler |
+| Web | `sublime dev:web` | `sublime build:web` (static site) |
 | Mobile | `sublime run` | `sublime build` (offline Android APK) |
-| Desktop | `sublime desktop:dev` | `sublime desktop:build` |
+| Desktop | `sublime dev:desktop` | `sublime build:desktop` |
 
-Re-run `sublime build:nav` after any navigation change, and reach for `sublime
-doctor` whenever a toolchain needs a sanity check.
+The dev commands recompile navigation on every storybook change, so you rarely
+touch `build:nav` directly. Reach for `sublime doctor` whenever a toolchain needs
+a sanity check.

@@ -2,7 +2,7 @@
  * Pure string renderers for the scaffolded `desktop/` directory of a Sublime app.
  *
  * These emit the Gulani-style Electron Forge setup wired to `@sublime-ui/desktop`:
- * `forge.config.ts` (Squirrel/ZIP/Deb/Rpm makers, AutoUnpackNatives, Fuses, the
+ * `forge.config.ts` (ZIP/Deb/Rpm makers, AutoUnpackNatives, Fuses, the
  * Webpack plugin), the two Webpack configs, and the `main.ts` / `preload.ts`
  * entries that call {@link startDesktop} and `exposeNativeBridge` respectively.
  *
@@ -17,7 +17,6 @@
 /** Renders `desktop/forge.config.ts`. */
 export function renderForgeConfig(): string {
   return `import type { ForgeConfig } from '@electron-forge/shared-types';
-import { MakerSquirrel } from '@electron-forge/maker-squirrel';
 import { MakerZIP } from '@electron-forge/maker-zip';
 import { MakerDeb } from '@electron-forge/maker-deb';
 import { MakerRpm } from '@electron-forge/maker-rpm';
@@ -35,8 +34,17 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [
-    new MakerSquirrel({}),
-    new MakerZIP({}, ['darwin']),
+    // ZIP is the default on every OS: fast, reliable, and it produces a portable
+    // build without the long (often hanging) installer-packing step. On Windows
+    // it yields a ready-to-run app folder zipped up — no install required.
+    //
+    // To also ship a Windows auto-update installer, install the Squirrel maker
+    // (\`npm i -D @electron-forge/maker-squirrel\`) and add it here:
+    //   import { MakerSquirrel } from '@electron-forge/maker-squirrel';
+    //   new MakerSquirrel({}),
+    // Note: Squirrel packing is slow and can appear to hang on large/unsigned
+    // apps — expect it to take several minutes.
+    new MakerZIP({}),
     new MakerRpm({}),
     new MakerDeb({}),
   ],

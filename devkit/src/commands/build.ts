@@ -3,6 +3,7 @@ import { join, basename } from 'node:path';
 import { ensureManagedJdk17 } from '../lib/jdk.js';
 import { resolveAndroidSdk } from '../lib/probe.js';
 import { runGradleWithHealing } from '../lib/gradle.js';
+import { buildNav } from './build-nav.js';
 import { runInherit } from '../util/exec.js';
 import { log } from '../util/log.js';
 
@@ -59,6 +60,18 @@ export async function buildCommand(opts: {
   const { path: androidHome } = resolveAndroidSdk(process.env);
   if (androidHome === null) {
     log.error('No Android SDK found. Run: sublime setup');
+    return 1;
+  }
+
+  // 0. Regenerate the navigation layer. Its four outputs (navigation.native.tsx,
+  //    navigation.tsx, routes.d.ts, index.ts) are gitignored build artifacts, so a
+  //    clean checkout (clone, CI, teammate, fresh machine) has only the storybook
+  //    sources. Without this, Metro fails to resolve ./navigation.js from the barrel.
+  //    Always regenerate so the bundle reflects the current storybooks.
+  log.step('Compiling navigation (build:nav)…');
+  const navCode = await buildNav({ cwd: opts.project });
+  if (navCode !== 0) {
+    log.error('build:nav failed — fix the navigation errors above, then rebuild.');
     return 1;
   }
 

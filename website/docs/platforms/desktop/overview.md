@@ -14,8 +14,8 @@ Two capabilities make up the desktop target:
 
 - **[Native bridge](/docs/core-concepts/native-calls)** — call Node/OS from your app through a
   single, secure, typed channel, and define your own native modules.
-- **[Packaging](./packaging.md)** — `sublime desktop:dev` and
-  `sublime desktop:build`, powered by Electron Forge.
+- **[Packaging](./packaging.md)** — `sublime dev:desktop` and
+  `sublime build:desktop`, powered by Electron Forge.
 
 ## Mental model
 

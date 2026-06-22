@@ -37,9 +37,10 @@ npm run dev:mobile         # Android debug build (run `sublime doctor` first)
 npm run typecheck          # if your app defines it; or: npx tsc --noEmit
 ```
 
-> **Rule of thumb:** any time you change a `storybook.web.ts` /
-> `storybook.native.ts`, re-run `build:nav` (or keep `--watch` running) so the
-> generated routes and types stay in sync.
+> **Rule of thumb:** the dev servers (`dev:web`, `dev:desktop`) recompile
+> navigation on every `storybook.web.ts` / `storybook.native.ts` change, and every
+> `build:*` compiles it up front — so generated routes and types stay in sync
+> without running `build:nav` by hand.
 
 ## Copy-paste commands
 
@@ -59,7 +60,7 @@ _Scaffold a new app (prompts for name + targets), then installs everything._
 npm run dev:web
 ```
 
-_Web app with hot reload (Vite)._
+_Web app with hot reload (Vite) — navigation recompiles on every storybook change._
 
 ```bash
 npm run dev:desktop
@@ -165,16 +166,21 @@ Only the scripts for the targets you selected are present.
 
 | Script | Runs | Target |
 | --- | --- | --- |
-| `npm run dev:web` | `vite` | Web dev server (hot reload) |
-| `npm run build:web` | `vite build` | Web production bundle |
+| `npm run dev:web` | `sublime dev:web` | Web dev server (hot reload + live nav) |
+| `npm run build:web` | `sublime build:nav && vite build` | Web production bundle |
 | `npm run dev:mobile` | `sublime build --debug` | Android debug build (needs Metro) |
 | `npm run build:mobile` | `sublime build` | Standalone Android APK (offline) |
-| `npm run dev:desktop` | `sublime desktop:dev` | Electron shell with HMR |
-| `npm run build:desktop` | `sublime desktop:build` | Desktop installers (Win/macOS/Linux) |
+| `npm run dev:desktop` | `sublime dev:desktop` | Electron shell with HMR + live nav |
+| `npm run build:desktop` | `sublime build:desktop` | Desktop apps (Win/macOS/Linux) |
 | `npm run build:nav` | `sublime build:nav` | Compile storybooks → typed navigation |
 
 All three targets follow the same shape: **`dev:<target>`** to run,
 **`build:<target>`** to package.
+
+The navigation layer is generated (and git-ignored), so you almost never run
+`build:nav` by hand: **`dev:web`** and **`dev:desktop`** compile it on startup and
+keep watching the storybooks — recompiling on every change — while every
+**`build:*`** (including `sublime build` for mobile) compiles it once up front.
 
 ## Where your builds go
 
@@ -185,7 +191,7 @@ in one place:
 | Command | Destination | Contents |
 | --- | --- | --- |
 | `npm run build:web` | **`dist/web/`** | Static site — `index.html` + hashed `assets/` |
-| `npm run build:desktop` | **`dist/desktop/`** | Installers — Squirrel `.exe`, `.zip`, `.deb`, `.rpm` |
+| `npm run build:desktop` | **`dist/desktop/`** | Portable apps — `.zip` (Win/macOS), `.deb`, `.rpm` (Linux) |
 | `npm run build:mobile` | **`dist/mobile/`** | The signed `.apk` (or `.aab` when you pass `--aab`) |
 
 `dist/` is git-ignored. Desktop and mobile produce intermediate native build trees
@@ -208,14 +214,20 @@ look in one folder.
 
 | Command | What it does |
 | --- | --- |
-| `sublime build:nav [--watch] [--force] [--project <path>]` | Compile `storybook.web.ts` / `storybook.native.ts` into `navigation.tsx`, `navigation.native.tsx`, a typed route map (`routes.d.ts`), and an index barrel. `--watch` rebuilds on change. |
+| `sublime build:nav [--watch] [--force] [--project <path>]` | Compile `storybook.web.ts` / `storybook.native.ts` into `navigation.tsx`, `navigation.native.tsx`, a typed route map (`routes.d.ts`), and an index barrel. `--watch` rebuilds on change. These four files are git-ignored build artifacts; `dev:web` / `dev:desktop` / `build` run this for you, so you rarely call it directly. |
+
+### Web (Vite)
+
+| Command | What it does |
+| --- | --- |
+| `sublime dev:web [--project <path>]` | Run the Vite dev server, compiling navigation first and recompiling it on every storybook change. |
 
 ### Desktop (Electron Forge)
 
 | Command | What it does |
 | --- | --- |
-| `sublime desktop:dev [--project <path>]` | Run the Electron shell in development (Forge start + HMR). |
-| `sublime desktop:build [--project <path>]` | Build desktop installers (Forge make) → `dist/desktop/`. |
+| `sublime dev:desktop [--project <path>]` | Run the Electron shell in development (Forge start + HMR), with live navigation recompilation. Aliased as `desktop:dev`. |
+| `sublime build:desktop [--project <path>]` | Build the desktop app (Forge make) → `dist/desktop/`. Aliased as `desktop:build`. |
 
 ### Mobile (offline Android)
 
@@ -223,7 +235,7 @@ look in one folder.
 | --- | --- |
 | `sublime doctor` | Check the Android toolchain (Node, JDK 17, SDK, NDK, CMake) — a ✓/✗ table. Managed pieces show a `(managed)` source. |
 | `sublime setup` | Provision the full Android toolchain into `~/.sublime` — fully automatic on Windows, macOS, and Ubuntu (see below). |
-| `sublime build [--release\|--debug] [--aab] [--project <path>]` | Build a standalone Android APK fully offline → `dist/mobile/`. `--release` (default) embeds the JS bundle; `--debug` needs Metro; `--aab` makes a Play Store bundle. |
+| `sublime build [--release\|--debug] [--aab] [--project <path>]` | Compile navigation, then build a standalone Android APK fully offline → `dist/mobile/`. `--release` (default) embeds the JS bundle; `--debug` needs Metro; `--aab` makes a Play Store bundle. |
 | `sublime run [--device <id>] [--project <path>]` | Install and launch the built APK on a device/emulator. |
 
 #### Environment setup (`sublime setup`)

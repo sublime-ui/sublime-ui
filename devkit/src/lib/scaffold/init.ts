@@ -77,7 +77,10 @@ export async function initApp(
     const installCode = await runner('npm', ['install', '--legacy-peer-deps'], opts.dir);
     if (installCode !== 0) { log.warn('npm install failed — run it manually.'); return 0; }
     log.step('Compiling navigation (build:nav)…');
-    await runner('npx', ['sublime', 'build:nav'], opts.dir);
+    const navCode = await runner('npx', ['sublime', 'build:nav'], opts.dir);
+    if (navCode !== 0) {
+      log.warn('build:nav failed — run "npm run build:nav" manually before building.');
+    }
     if (targets.includes('desktop')) {
       // The desktop/ Electron Forge package is a nested npm project; its deps
       // (electron-forge CLI, makers, loaders) live in desktop/node_modules and are

@@ -67,6 +67,27 @@ export async function buildNav(opts: BuildNavOptions): Promise<number> {
   return code;
 }
 
+/**
+ * Run an initial nav build, then watch the storybook sources and rebuild on
+ * change — returning the live watchers so the caller can stop them.
+ *
+ * Unlike {@link buildNav} (which owns the process in `--watch` mode), this is for
+ * embedding the watcher alongside a dev server (`dev:web`, `desktop:dev`): the
+ * caller runs the server, then calls `.close()` on each returned watcher when the
+ * server exits. The initial build's exit code is intentionally not surfaced — a
+ * dev server should still start (and recover on the next save) even if the
+ * storybooks momentarily fail to compile.
+ */
+export async function watchNav(opts: { cwd: string }): Promise<FSWatcher[]> {
+  const cfg = loadConfig(opts.cwd);
+  const navDir = join(opts.cwd, cfg.navigationDir);
+  const nativeFile = join(navDir, 'storybook.native.ts');
+  const webFile = join(navDir, 'storybook.web.ts');
+
+  await buildOnce(navDir, nativeFile, webFile);
+  return watchAndRebuild(navDir, nativeFile, webFile);
+}
+
 /** Run a single load → validate → render → write pass. */
 async function buildOnce(navDir: string, nativeFile: string, webFile: string): Promise<number> {
   // A project only carries the storybooks for the targets it was scaffolded with
@@ -172,5 +193,7 @@ function watchAndRebuild(navDir: string, nativeFile: string, webFile: string): F
       void buildOnce(navDir, nativeFile, webFile);
     }, 50);
   };
-  return [nativeFile, webFile].map((file) => fsWatch(file, trigger));
+  // A project only carries the storybooks for the targets it was scaffolded with;
+  // fs.watch throws on a missing path, so watch only what exists.
+  return [nativeFile, webFile].filter((file) => existsSync(file)).map((file) => fsWatch(file, trigger));
 }

@@ -280,8 +280,8 @@ sublime doctor     # check your environment
 ```
 
 The same `sublime` CLI scaffolds (`make:model`, `make:component`, `theme:init`),
-generates navigation (`build:nav`), and packages desktop (`desktop:dev`,
-`desktop:build`) — one tool, end to end.
+generates navigation (`build:nav`), and packages desktop (`dev:desktop`,
+`build:desktop`) — one tool, end to end.
 
 **The DX win.** A build you can run without a network round-trip, and one CLI that
 covers the whole workflow.

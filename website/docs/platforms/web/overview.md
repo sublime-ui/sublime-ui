@@ -53,10 +53,10 @@ web/                    # Vite entry — mounts the web app
 You never hand-write react-router. You author `storybook.web.ts` — a declarative
 **storybook** of books and pages with a web print format (`sidebar`, `stack`, or
 `tabs`) — and `sublime build:nav` compiles it ahead of time into the idiomatic
-`navigation.tsx`. Re-run `build:nav` whenever you change a storybook so the
-generated navigation stays in sync. See [Routing](./routing.md) for the full
-flow, and the [Storybook Navigation](/docs/core-concepts/navigation) docs for the
-shared model across platforms.
+`navigation.tsx`. You don't run that by hand during development: `dev:web` watches
+the storybooks and recompiles on every change. See [Routing](./routing.md) for the
+full flow, and the [Storybook Navigation](/docs/core-concepts/navigation) docs for
+the shared model across platforms.
 
 ## Develop and build
 
@@ -66,6 +66,7 @@ npm run build:web   # production bundle
 ```
 
 `dev:web` serves your app with hot module replacement — edits to web screens
-reload live. `build:web` produces the static, deployable bundle. For the full
-per-target dev loop and CLI details, see
+reload live — and recompiles the navigation whenever a storybook changes.
+`build:web` compiles navigation, then produces the static, deployable bundle. For
+the full per-target dev loop and CLI details, see
 [Running Your App](/docs/getting-started/running).

@@ -117,10 +117,12 @@ Mobile uses your `src/screens/mobile/*.native.tsx` screens and
 - **Add a model:** `sublime make:model Post --fields "title:string"`
 - **Add a component:** `sublime make:component Card`
 - **Edit navigation:** change `src/navigation/storybook.web.ts` /
-  `storybook.native.ts`, then re-run `npm run build:nav`.
+  `storybook.native.ts` — `dev:web` / `dev:desktop` recompile it automatically.
 
-When you change navigation, always re-run `build:nav` to regenerate the typed
-routes.
+The generated navigation files are git-ignored build artifacts. The dev servers
+regenerate them on every storybook change, and every build (`sublime build`,
+`build:web`, `build:desktop`) regenerates them up front — so you rarely run
+`build:nav` directly.
 
 ## Next steps
 

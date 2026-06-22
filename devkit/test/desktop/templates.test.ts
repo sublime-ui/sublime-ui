@@ -11,14 +11,14 @@ describe('desktop templates', () => {
   describe('renderForgeConfig', () => {
     const out = renderForgeConfig();
 
-    it('wires the Squirrel maker', () => {
-      expect(out).toContain('MakerSquirrel');
-    });
-
-    it('wires the cross-platform makers', () => {
+    it('wires the cross-platform makers (ZIP default, no Squirrel by default)', () => {
       expect(out).toContain('MakerZIP');
       expect(out).toContain('MakerDeb');
       expect(out).toContain('MakerRpm');
+      // Squirrel is opt-in (it can hang on Windows); it must not be an active
+      // default maker. The opt-in instructions mention it in a comment, so match
+      // only an uncommented `new MakerSquirrel(...)` line.
+      expect(out).not.toMatch(/^\s*new MakerSquirrel/m);
     });
 
     it('unpacks native node modules from the asar', () => {

@@ -10,6 +10,7 @@ import { themeInit } from './commands/theme-init.js';
 import { buildNav } from './commands/build-nav.js';
 import { desktopDev } from './commands/desktop-dev.js';
 import { desktopBuild } from './commands/desktop-build.js';
+import { devWeb } from './commands/dev-web.js';
 import { runInit } from './commands/init.js';
 import { log } from './util/log.js';
 
@@ -144,15 +145,25 @@ program
   });
 
 program
-  .command('desktop:dev')
-  .description('Run the Electron desktop shell in development (electron-forge start)')
+  .command('dev:web')
+  .description('Run the web dev server (Vite) with live navigation recompilation')
+  .option('--project <path>', 'project directory', process.cwd())
+  .action(async (opts: { project: string }) => {
+    process.exit(await devWeb({ project: opts.project }));
+  });
+
+program
+  .command('dev:desktop')
+  .alias('desktop:dev')
+  .description('Run the Electron desktop shell in development, with live navigation recompilation')
   .option('--project <path>', 'project directory', process.cwd())
   .action(async (opts: { project: string }) => {
     process.exit(await desktopDev({ project: opts.project }));
   });
 
 program
-  .command('desktop:build')
+  .command('build:desktop')
+  .alias('desktop:build')
   .description('Build distributable Electron artifacts (electron-forge make)')
   .option('--project <path>', 'project directory', process.cwd())
   .action(async (opts: { project: string }) => {
